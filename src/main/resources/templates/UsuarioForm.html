@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Registro</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playwrite+AU+NSW:wght@100..400&display=swap" rel="stylesheet">
+
+        <style>
+
+            .container {
+                background-color: white;
+                margin-top: 50px;
+                margin-bottom: 50px;
+                border: 1px solid black;
+                border-radius: 1px 30px;
+                padding: 20px 100px;
+                
+                box-shadow: 10px 5px 5px #C2C2C2;
+
+            }
+
+            input {
+                font-family: "Playwrite AU NSW", cursive;
+                font-optical-sizing: auto;
+                font-style: normal;
+            }
+
+            input:hover {
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.94);
+            }
+
+            .title {
+                text-transform: uppercase;
+                font-family: "Bebas Neue", sans-serif;
+                font-size: 50px;
+                font-style: normal;
+            }
+
+            .subtitle {
+                text-transform: uppercase;
+                font-family: "Bebas Neue", sans-serif;
+                font-size: 40px;
+                font-style: normal;
+            }
+
+            label {
+                font-family: "Playwrite AU NSW", cursive;
+                font-optical-sizing: auto;
+                font-style: normal;
+                font-weight: bold;
+            }
+
+            .form-group {
+                padding: 10px;
+            }
+
+            .btn-add {
+                background-color: black;
+                width: 200px;
+                height: 50px;
+                border-radius: 20px;
+
+                text-transform: uppercase;
+                font-family: "Bebas Neue", sans-serif;
+                font-size: 30px;
+                font-style: normal;
+            }
+
+            .btn-add:hover {
+                background-color: white;
+                color: black;
+                border: 2px solid black;
+
+            }
+
+            span {
+                font-family: "Playwrite AU NSW", cursive;
+                font-optical-sizing: auto;
+                font-style: normal;
+                font-weight: bold;
+            }
+
+
+
+            /*Inputs*/
+            .correct {
+                border-color: green;
+            }
+
+            .error {
+                border-color: red;
+            }
+
+            .msg-error {
+                color: red;
+            }
+
+            .error-msg {
+                color: red;
+            }
+
+            .error-msg-lenght {
+                color: red;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container">
+            <form method="post" th:object="${Usuario}" th:action="@{/usuario/add}">
+                <center><h1 class="title">Registro</h1></center>
+                
+                <!--<input type="text" th:field="${usuario.idUsuario}">
+                <input type="text" th:field="${usuario.Direcciones[0].IdDireccion}">-->
+
+                <!-- Datos de identificacion -->
+                <div class="datos-identity">  
+                    <h4 class="subtitle">Datos de identidad</h4>
+                    <div class="row">
+                        <!-- Nombre -->
+                        <div class="form-group col-12">
+                            <label for="usr">Nombre:</label>
+                            <input type="text" class="form-control" id="inputNombre" placeholder="Ingresa nombre" th:field="*{Nombre}" onkeydown="SoloLetras(event, this)">
+                            <!--<span class="error-msg"></span>
+                            <span class="correct-msg"></span>-->
+                            <span class="text-danger"
+                            th:if="${#fields.hasErrors('Nombre')}"
+                            th:errors="*{Nombre}">
+                         Message error
+                     </span>
+                        </div>
+
+                        <!-- Apellido paterno -->
+                        <div class="form-group col-6">
+                            <label for="usr">Apellido paterno:</label>
+                            <input type="text" class="form-control" id="inputApellidoPaterno" placeholder="Ingresa apellido paterno" th:field="*{ApellidoPaterno}" onkeydown="SoloLetras(event, this)">
+                            <!--<span class="error-msg"></span>-->
+                            <span class="text-danger"
+                                  th:if="${#fields.hasErrors('ApellidoPaterno')}"
+                                  th:errors="*{ApellidoPaterno}">
+                                Message error
+                            </span>
+                        </div>
+
+                        <!-- Apellido materno -->
+                        <div class="form-group col-6">
+                            <label for="usr">Apellido materno:</label>
+                            <input type="text" class="form-control" id="inputApellidoMaterno" placeholder="Ingresa apellido materno" th:field="*{ApellidoMaterno}" onkeydown="SoloLetras(event, this)">
+                            <!--<span class="error-msg"></span>-->
+                            <span class="text-danger"
+                                  th:if="${#fields.hasErrors('ApellidoMaterno')}"
+                                  th:errors="*{ApellidoMaterno}">
+                                Message error
+                            </span>
+                        </div>
+
+                        <!-- CURP -->
+                        <div class="form-group col-6">
+                            <label for="usr">CURP:</label>
+                            <input type="text" class="form-control" id="inputCurp" placeholder="Ingresa CURP" th:field="*{Curp}" onkeydown="SoloLetrasNumeros(event, this)">
+                            <!--<span class="error-msg"></span>-->
+                            <span class="text-danger"
+                                  th:if="${#fields.hasErrors('Curp')}"
+                                  th:errors="*{Curp}">
+                                Message error
+                            </span>
+                        </div>
+
+                        <!-- Fecha de nacimiento -->
+                        <div class="form-group col-6">
+                            <label for="usr">Fecha de nacimiento:</label>
+                            <input type="date" class="form-control" id="inputFechaNacimiento" placeholder="yyyy-mm-dd" aria-label="Last name" th:field="*{FechaNacimiento}" >
+                        </div>
+
+                        <!-- Sexo -->
+                        <center>
+                            <div class="form-group col-12">
+                                <label for="usr">Sexo:</label>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="M" th:field="*{Sexo}">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Masculino
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="F" th:field="*{Sexo}" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Femenino
+                                    </label>
+                                </div>
+                            </div>
+                        </center>
+
+                        <!-- Rol -->
+                        <div class="form-group col-12">
+                            <label for="usr">Rol:</label>
+                            <select class="form-control" id="sel1" th:field="*{Rol.IdRol}">
+                                <option value="0" selected>Selecciona Rol</option>
+                                <option th:each="rol : ${roles}" th:text="${rol.Nombre}" th:value="${rol.IdRol}"  th:field="*{Rol.IdRol}">One</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <!-- Datos de correo -->
+                <div class="datos-correo">
+                    <h4 class="subtitle">Correo electrónico</h4>
+                    <div class="row">
+
+                        <!-- Username -->
+                        <div class="form-group col-12">
+                            <label for="usr">Username:</label>
+                            <input type="text" class="form-control" id="inputUserName" placeholder="Ingresa username" th:field="*{UserName}" onkeyup="validarUserName(event, this)">
+                            <span class="error-msg"></span>
+                            <!--<span class="text-danger"
+                                  th:if="${#fields.hasErrors('UserName')}"
+                                  th:errors="*{UserName}">
+                                Message error
+                            </span>-->
+                        </div>
+
+                        <!-- Email-->
+                        <div class="form-group col-12">
+                            <label for="usr">Email:</label>
+                            <input type="email" class="form-control" id="inputEmail" placeholder="Ingresa email" th:field="*{Email}" onkeyup="ValidarEmail(event, this)">
+                            <!--<span class="error-msg"></span>-->
+                            <span class="text-danger"
+                                  th:if="${#fields.hasErrors('Email')}"
+                                  th:errors="*{Email}">
+                                Message error
+                            </span>
+                        </div>
+
+                        <!-- Contraseña -->
+                        <div class="form-group col-6">
+                            <label for="usr">Contraseña:</label>
+                            <input type="password" class="form-control" id="inputPassword" placeholder="Ingresa contraseña" th:field="*{Password}" onkeyup="SecurePassword(event, this)">
+                            <span class="error-msg-lenght msg-error"></span>
+                            <span class="error-msg msg-error"></span>
+                            <span class="error-msg-mayuscula msg-error"></span>
+                            <span class="error-msg-minuscula msg-error"></span>
+                            <span class="error-msg-numero msg-error"></span>
+                            <span class="error-msg-password msg-error"></span>
+                        </div>
+
+                        <!-- Confirmar Contraseña -->
+                        <div class="form-group col-6">
+                            <label for="usr">Confirmar contraseña:</label>
+                            <input type="password" class="form-control" id="inputConfirmPassword" placeholder="Ingresa contraseña" onblur="VerificarPasswords(event, this)">
+                            <span class="error-msg"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <!-- Datos de contacto -->
+                <div class="datos-contacto">
+                    <h4 class="subtitle">Datos de contacto</h4>
+                    <div class="row">
+
+                        <!-- Telefono -->
+                        <div class="form-group col-12">
+                            <label for="usr">Teléfono:</label>
+                            <input type="number" class="form-control" id="inputTelefono" placeholder="Ingresa teléfono fijo" th:field="*{Telefono}" onkeydown="ValidarTelefono(event, this)" >
+                            <!--<span class="error-msg"></span>-->
+                            <span class="error-msg-lenght msg-error"></span>
+                            <span class="text-danger"
+                                  th:if="${#fields.hasErrors('Telefono')}"
+                                  th:errors="*{Telefono}">
+                                Message error
+                            </span>
+                        </div>
+
+                        <!-- Celular -->
+                        <div class="form-group col-12">
+                            <label for="usr">Celular:</label>
+                            <input type="number" class="form-control" id="inputCelular" placeholder="Ingresa teléfono celular" th:field="*{Celular}" onkeydown="ValidarCelular(event, this)">
+                            <span class="error-msg"></span>
+                            <!--<span class="error-msg-lenght msg-error"></span>-->
+                            <span class="text-danger"
+                                  th:if="${#fields.hasErrors('Celular')}"
+                                  th:errors="*{Celular}">
+                                Message error
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <!-- Datos de contacto -->
+                <div class="datos-contacto">
+                    <h4 class="subtitle">Datos de residencia</h4>
+                    <div class="row">
+
+                        <!-- Calle -->
+                        <div class="form-group col-12">
+                            <label for="usr">Calle:</label>
+                            <input type="text" class="form-control" id="inputCalle" placeholder="Ingresa dirección" th:field="*{Direcciones[0].Calle}" onkeyup="ValidarCalle(event, this)">
+                            <span class="error-msg"></span>
+                            <!--<span class="text-danger"
+                                  th:if="${#fields.hasErrors('Direcciones[0].Calle')}"
+                                  th:errors="*{Direcciones[0].Calle}">
+                                Message error
+                            </span>-->
+                        </div>
+
+                        <!-- Numero interior -->
+                        <div class="form-group col-6">
+                            <label for="usr">Numero interior:</label>
+                            <input type="text" class="form-control" id="inputNumeroInterior" placeholder="# int" th:field="*{Direcciones[0].NumeroInterior}" onkeydown="SoloNumeros(event, this)">
+                            <span class="error-msg"></span>
+                        </div>
+
+                        <!-- Numero exterior -->
+                        <div class="form-group col-6">
+                            <label for="usr">Numero exterior:</label>
+                            <input type="text" class="form-control" id="inputNumeroExterior" placeholder="# ext" th:field="*{Direcciones[0].NumeroExterior}" onkeydown="SoloNumeros(event, this)">
+                            <span class="error-msg"></span>
+                        </div>
+
+                        <!-- Pais -->
+                        <div class="form-group col-3">
+                            <label for="usr">Pais:</label>
+                            <select class="form-control" id="selectPais">
+                                <option value=0 selected>Selecciona pais</option>
+                                <option th:each="pais : ${paises}" th:text="${pais.Nombre}" th:value="${pais.IdPais}">One</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Estado -->
+                        <div class="form-group col-3">
+                            <label for="usr">Estado:</label>
+                            <select class="form-control" id="selectEstado">
+                                <option value=0 selected>Selecciona Estado</option>
+                                
+                            </select>
+                        </div>
+                        
+                        <!-- Municipio -->
+                        <div class="form-group col-3">
+                            <label for="usr">Municipio:</label>
+                            <select class="form-control" id="selectMunicipio">
+                                <option value=0 selected>Selecciona Municipio</option>
+                                
+                            </select>
+                        </div>
+                        
+                        <!-- Colonia -->
+                        <div class="form-group col-3">
+                            <label for="usr">Colonia:</label>
+                            <select class="form-control" id="selectColonia" th:field="*{Direcciones[0].Colonia.IdColonia}">
+                                <option value=0 selected>Selecciona Colonia</option>
+                                
+                            </select>
+                        </div>
+                        <!--<input type="number" class="form-control" id="inputPassword3" placeholder="Ingresa id de colonia" th:field="*{Direcciones[0].Colonia.IdColonia}">-->
+                    </div>
+                </div>
+
+                <br>
+
+                <center><button type="submit" class="btn btn-success btn-add">Agregar</button></center>
+
+            </form>
+        </div>
+
+        
+        <script>
+    $(document).ready(function() {
+        console.log("Hola soy el cliente");
+        
+        $("#selectPais").change(function() {
+            $.ajax({
+                type: "GET",
+                url: "/usuario/getEstadosByIdPais/" + $("#selectPais").val(),
+                dataType: 'json',
+                success: function(data, textStatus, jqXHR) {
+                    if (data.correct) {
+                        $("#selectEstado").empty();
+                        $("#selectEstado").append("<option value=0 selected>Selecciona un estado</option>")
+                        $.each(data.objects, function(indice, estado) {
+                            $("#selectEstado").append("<option value=" + estado.idEstado + ">"+ estado.nombre+"</option>")
+                        });
+                    } else {
+                        console.log("No tengo datos");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                        alert("something went wrong");
+                }
+            });
+        });
+        
+        $("#selectEstado").change(function() {
+            $.ajax({
+                type: "GET",
+                url: "/usuario/getMunicipiosByIdEstado/" + $("#selectEstado").val(),
+                dataType: 'json',
+                success: function(data, textStatus, jqXHR) {
+                    if (data.correct) {
+                        $("#selectMunicipio").empty();
+                        $("#selectMunicipio").append("<option value=0 selected>Selecciona un municipio</option>")
+                        $.each(data.objects, function(indice, municipio) {
+                            $("#selectMunicipio").append("<option value=" + municipio.idMunicipio + ">"+ municipio.nombre+"</option>")
+                        });
+                    } else {
+                        console.log("No tengo datos");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                        alert("something went wrong");
+                }
+            });
+        });
+        
+        
+        
+        $("#selectMunicipio").change(function() {
+        
+            $.ajax({
+                type: "GET",
+                url: "/usuario/getColoniasByIdMunicipio/" + $("#selectMunicipio").val(),
+                dataType: 'json',
+                success: function(data, textStatus, jqXHR) {
+                    if (data.correct) {
+                    
+                        $("#selectColonia").empty();
+                        $("#selectColonia").append("<option value=0 selected>Selecciona una colonia</option>")
+                        $.each(data.objects, function(indice, colonia) {
+                            $("#selectColonia").append("<option value=" + colonia.idColonia + ">"+ colonia.nombre+"</option>")
+                        });
+                    } else {
+                        console.log("No tengo datos");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                        alert("something went wrong");
+                }
+            });
+        });
+        
+        
+    });
+</script>
+
+
+        <script>
+
+            function SoloLetras(event, input) {
+            let key = event.key;
+            let ascii = event.keyCode;
+
+            let regex = new RegExp(/^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]*$/);
+
+            if (regex.test(key)) {
+            if (ascii >= 65 && ascii <= 90) { //Solo letras
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            }
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("Solo se permiten letras");
+            event.preventDefault(); //No permitir numeros
+            }
+            }
+
+
+            function SoloLetrasNumeros(event, input) {
+            let key = event.key;
+            let ascii = event.keyCode;
+
+            let regex = new RegExp('^[a-zA-Z0-9\s]*$');
+
+            if (regex.test(key)) {
+            //if (ascii >= 65 && ascii <= 90) { //Solo letras
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+
+            //}
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("Solo se permiten letras y numeros");
+            event.preventDefault();
+            }
+            }
+
+            function SoloNumeros(event, input) {
+            let key = event.key;
+            let ascii = event.keyCode;
+
+            let regex = new RegExp('^[0-9]*$');
+
+            if (regex.test(key) || ascii == 8) {
+
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("Solo se permiten numeros");
+            event.preventDefault();
+            }
+            }
+
+            //Validar que le usuario no pueda acceder a fechas futuras
+            inputFechaNacimiento.max = new Date().toISOString().split("T")[0];
+
+            function SecurePassword(event, input) {
+
+            //Validar minuscula
+            if ($("#inputPassword").val().match(/[A-z]/)) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg-minuscula").text("");
+
+            //Validar mayuscula
+            if ($("#inputPassword").val().match(/[A-Z]/)) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg-mayuscula").text("");
+
+            //Validar numero
+            if ($("#inputPassword").val().match(/\d/)) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg-numero").text("");
+
+            //Validar caracter especial
+            if ($("#inputPassword").val().match(/[@$!%*?&]/)) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg-password").text("");
+            if ($("#inputPassword").val().length > 8) {
+
+            // $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg-lenght").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg-lenght").text("La contraseña debe ser mayor de 8 caracteres");
+            }
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg-password").text("Al menos un caracter especial ");
+            }
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg-numero").text("Un numero ");
+            }
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg-mayuscula").text("Una mayuscula ");
+            }
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg-minuscula").text("Una minuscula ");
+            }
+            }
+
+            function VerificarPasswords(event, input) {
+            password1 = $("#inputPassword").val();
+            password2 = $("#inputConfirmPassword").val();
+
+            if (password1 != password2) {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("Las contraseñas no coinciden");
+            } else {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            }
+            }
+
+            function ValidarTelefono(event, input) {
+            let key = event.key;
+            let ascii = event.keyCode;
+
+            let regex = new RegExp('^[0-9]*$');
+
+            if (regex.test(key) || ascii == 8) {
+
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+
+            if ($("#inputTelefono").val().length == 9 || ascii == 8) {
+            $(input).siblings(".error-msg-lenght").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg-lenght").text("Longitud del telefono debe ser del 10");
+            }
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("Solo se permiten numeros");
+            event.preventDefault();
+            }
+            }
+
+            function ValidarCelular(event, input) {
+            let key = event.key;
+            let ascii = event.keyCode;
+
+            let regex = new RegExp('^[0-9]*$');
+
+            if (regex.test(key) || ascii == 8) {
+
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+
+            if ($("#inputCelular").val().length == 9 || ascii == 8) {
+            $(input).siblings(".error-msg-lenght").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg-lenght").text("Longitud del telefono debe ser del 10");
+            }
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("Solo se permiten numeros");
+            event.preventDefault();
+            }
+            }
+
+            function validarUserName(event, input) {
+            let key = event.key;
+            let regex = new RegExp(/^[^_|0-9|\s]+[a-zA-Z0-9]+$/);
+
+            if (regex.test($("#inputUserName").val())) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            return true;
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("No puedes empezar por un numero, ni por un guion bajo");
+            return false;
+            event.preventDefault();
+            
+            
+            }
+            }
+
+            function ValidarCalle(event, input) {
+            let key = event.key;
+            let regex = new RegExp(/^[^@$!%*?&]+$/);
+
+            if (regex.test($("#inputCalle").val())) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("No se permite caracteres especiales");
+            event.preventDefault();
+            }
+            }
+
+            function ValidarEmail(event, input) {
+            let key = event.key;
+            let regex = new RegExp(/^[a-zA-Z-0-9]+[^-|\s]+@[a-zA-Z]+\.[a-z]+/);
+
+            if (regex.test($("#inputEmail").val())) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("Ingresa un correo valido");
+            event.preventDefault();
+            }
+
+            }
+
+            //Funcion para evitar copiar y/o pegar en algun campo
+            $(document).ready(function () {
+            //Evitar copiar y pegar en el campo Nombre
+            $("#inputNombre").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputNombre").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Apellido Paterno
+            $("#inputApellidoPaterno").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputApellidoPaterno").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Apellido Materno
+            $("#inputApellidoMaterno").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputApellidoMaterno").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo UserName
+            $("#inputUserName").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputUserName").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Curp
+            $("#inputCurp").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputCurp").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Apellido Materno
+            $("#inputApellidoMaterno").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputApellidoMaterno").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Email
+            $("#inputEmail").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputEmail").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Password
+            $("#inputPassword").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputPassword").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Confirm password
+            $("#inputConfirmPassword").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputConfirmPassword").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Telefono
+            $("#inputTelefono").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputTelefono").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Celular
+            $("#inputCelular").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputCelular").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Calle
+            $("#inputCalle").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputCalle").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Numero Interior
+            $("#inputNumeroInterior").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputNumeroInterior").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            //Evitar copiar y pegar en el campo Numero Exterior
+            $("#inputNumeroExterior").on('paste', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+
+            $("#inputNumeroExterior").on('copy', function (e) {
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+            })
+            })
+
+        </script>
+        
+        <script>
+            $(document).ready(function() {
+  $('form').submit(function(event) {
+    // Prevenir el envío por defecto del formulario
+    event.preventDefault();
+
+    // Validar los campos del formulario
+    if (validarUserName()) {
+      // Si la validación es exitosa, enviar el formulario
+      this.submit();
+    } else {
+      // Si la validación falla, mostrar un mensaje de error o realizar alguna acción
+      alert('Por favor, corrige los errores en el formulario.');
+    }
+  });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Detalles del Usuario</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Bebas+Neue&family=Playwrite+AU+NSW:wght@100..400&display=swap" rel="stylesheet">
+
+        <style>
+            .container {
+                //display: flex;
+                padding: 20px;
+            }
+
+            .personal-info {
+                //flex: 1;
+                padding: 20px;
+                //border: 1px dotted black;
+                background-color: #EDEBE8;
+                //margin-right: 20px;
+                border-radius: 20px;
+                border: 5px;
+
+                text-align: center;
+
+                font-family: "Playwrite AU NSW", cursive;
+                font-optical-sizing: auto;
+                font-style: normal;
+
+
+
+
+            }
+
+
+            .image-user {
+                width: 180px;
+                height: 180px;
+                background-repeat: no-repeat;
+                background-image: url('https://th.bing.com/th/id/OIP.awAiMS1BCAQ2xS2lcdXGlwHaHH?w=220&h=211&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3');
+                background-position: center; /* Centra la imagen */
+                background-size: contain;
+            }
+
+            .directions {
+                //flex: 4;
+                padding: 20px;
+                border: 5px dotted black;
+
+                font-family: "Barlow Condensed", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                font-size: 20px;
+            }
+
+            .name-user {
+                font-size: 30px;
+                font-weight: bold;
+                justify-content: center; /* Centra horizontalmente */
+            }
+
+            .directions-title {
+                font-weight: bold;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center container-info">
+                <div class="personal-info col-lg-4 col-md-4 col-sm-4" style="height: 430px">
+                    
+                    <!-- Editar usuario -->
+                    <a class="btn btn-warning btn-add-user" th:href="|@{/usuario/formEditable?IdUsuario=}${usuario.IdUsuario}|">Editar <i class="bi bi-pencil-square"></i></a>
+
+                    <div class="image-user col-auto"></div>
+
+                    <div cass><span class="info name-user" th:text="|${usuario.Nombre} ${usuario.ApellidoPaterno} ${usuario.ApellidoMaterno}|"></span></div>
+                    <div>UserName: <span class="info username" th:text="${usuario.UserName}"></span></div>
+                    <div>Correo: <span class="info email" th:text="${usuario.Email}"></span></div>
+                    <div>Sexo: <span class="info sexo" th:text="${usuario.Sexo}"></span></div>
+                    <div>Telefono: <span class="info telefono" th:text="${usuario.Telefono}"></span></div>
+                    <div>Celular: <span class="info celular" th:text="${usuario.Celular}"></span></div>
+                    <div>CURP: <span class="info curp" th:text="${usuario.Curp}"></span></div>
+                    <div>Rol: <span class="info curp" th:text="${usuario.rol.Nombre}"></span></div>
+
+                </div>
+
+                <div class="directions col-lg-8 col-md-8 col-sm-8" style="height: 430px">
+                    
+                    <!-- Agregar direccion -->
+                    <!--<a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success btn-util">Agregar direccion<i class="bi bi-pencil-square"></i></a>-->
+                    <center><h1 class="directions-title">Direcciones</h1></center>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Calle</th>
+                                    <th scope="col-2">Numero interior</th>
+                                    <th scope="col">Numero exterior</th>
+                                    <th scope="col">Colonia</th>
+                                    <th scope="col">Municipio</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Pais</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr th:each="direccion : ${usuario.Direcciones}">
+                                    <!-- Util -->
+                                    <td>
+                                        <!-- Editar direccion -->
+                                        <!--<a th:href="|@{/usuario/formEditable?IdDireccion=}${direccion.IdDireccion}&IdUsuario=${usuario.IdUsuario}|" class="btn btn-warning btn-util"><i class="bi bi-pencil-square"></i></a>-->
+                                        <!-- Eliminar direccion -->
+                                        <a class="btn btn-danger btn-util"><i class="bi bi-trash3-fill"></i></a>
+                                    </td>
+                                    <td th:text="${direccion.Calle}"></td>
+                                    <td th:text="${direccion.NumeroInterior}"></td>
+                                    <td th:text="${direccion.NumeroExterior}"></td>
+                                    <td th:text="${direccion.Colonia.Nombre}"></td>
+                                    <td th:text="${direccion.Colonia.Municipio.Nombre}"></td>
+                                    <td th:text="${direccion.Colonia.Municipio.Estado.Nombre}"></td>
+                                    <td th:text="${direccion.Colonia.Municipio.Estado.Pais.Nombre}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

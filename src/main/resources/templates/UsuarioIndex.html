@@ -1,0 +1,127 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Usuarios</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Bebas+Neue&family=Playwrite+AU+NSW:wght@100..400&display=swap" rel="stylesheet">
+
+        <style>
+            .btn-util {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%
+            }
+
+            .title {
+                text-transform: uppercase;
+                font-family: "Bebas Neue", sans-serif;
+                font-size: 50px;
+                font-style: normal;
+            }
+
+            .btn-add-user {
+                width: 180px;
+                height: 40px;
+                border-radius: 20px;
+                background-color: black;
+
+                text-transform: uppercase;
+                font-family: "Bebas Neue", sans-serif;
+                font-size: 20px;
+                font-style: normal;
+            }
+
+            .btn-add-user:hover {
+                background-color: white;
+                border: 3px solid black;
+                color: black;
+            }
+
+            .table {
+                font-family: "Barlow Condensed", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                font-size: 20px;
+
+            }
+
+            .td-nombreUser{
+                font-weight: bold;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container">
+            <br>
+            <a class="btn btn-success btn-add-user" th:href="@{/usuario/action/{idUsuario}(idUsuario = 0)}">Registrar usuario <i class="bi bi-person-add"></i></a>
+
+
+            <br>
+            <center><h1 class="title">Usuarios</h1></center>
+            <br>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col-2">Nombre</th>
+                            <th scope="col">Direccion</th>
+
+                            <th scope="col">Contacto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="usuario : ${usuarios}">
+                            <!-- Util -->
+                            <td>
+                                <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-warning btn-util"><i class="bi bi-pencil-square"></i></a>
+                                <a class="btn btn-danger btn-util"><i class="bi bi-trash3-fill"></i></a>
+                            </td>  
+
+                            <!-- Nombre -->
+                            <td class="td-nombreUser" th:text="|${usuario.Nombre} ${usuario.ApellidoPaterno} ${usuario.ApellidoMaterno}|"></td>
+
+                            <!-- Direccion(es) -->
+                            <td>
+                                <ul>
+                                    <li th:each="direccion : ${usuario.Direcciones}">
+                                        <span th:if="${direccion != null}">
+                                            <p th:text="|${direccion.Calle}, Numero Interior: ${direccion.NumeroInterior}, Numero Exterior: ${direccion.NumeroExterior}, Colonia ${direccion.Colonia.Nombre}, ${direccion.Colonia.Municipio.Nombre}, ${direccion.Colonia.Municipio.Estado.Nombre}, ${direccion.Colonia.Municipio.Estado.Pais.Nombre}|"><p>
+                                        </span>
+                                        <span th:if="${direccion == null}"><p>No data</p></span>
+                                    </li>
+                                </ul>
+                            </td>
+
+                            <!-- Contacto -->
+                            <td>
+                                <ul>
+                                    <ol><p th:text="|Correo: ${usuario.Email}|"></p></ol>
+                                    <ol><p th:text="|Telefono: ${usuario.Telefono}|"></p></ol>
+                                    <ol><p th:text="|Celular: ${usuario.Celular}|"></p></ol>
+                                    <ol><p th:text="|Rol: ${usuario.rol.Nombre}|"></p></ol>
+
+                                </ul>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
