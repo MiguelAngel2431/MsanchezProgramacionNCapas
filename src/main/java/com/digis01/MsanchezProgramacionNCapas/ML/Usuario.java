@@ -226,6 +226,14 @@ public class Usuario {
         return Rol;
     }
     
+    public List<Direccion> getDirecciones() {
+        return Direcciones;
+    }
+
+    public void setDirecciones(List<Direccion> Direcciones) {
+        this.Direcciones = Direcciones;
+    }
+    
     
 
     /*@Override
@@ -241,11 +249,5 @@ public class Usuario {
                 '}';
     }*/
 
-    public List<Direccion> getDirecciones() {
-        return Direcciones;
-    }
-
-    public void setDirecciones(List<Direccion> Direcciones) {
-        this.Direcciones = Direcciones;
-    }
+    
 }

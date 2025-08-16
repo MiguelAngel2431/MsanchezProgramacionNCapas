@@ -8,9 +8,13 @@ import com.digis01.MsanchezProgramacionNCapas.DAO.RolDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.UsuarioDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.ML.Colonia;
 import com.digis01.MsanchezProgramacionNCapas.ML.Direccion;
+import com.digis01.MsanchezProgramacionNCapas.ML.Estado;
+import com.digis01.MsanchezProgramacionNCapas.ML.Municipio;
+import com.digis01.MsanchezProgramacionNCapas.ML.Pais;
 import com.digis01.MsanchezProgramacionNCapas.ML.Result;
 import com.digis01.MsanchezProgramacionNCapas.ML.Usuario;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -119,35 +123,126 @@ public class UsuarioController {
 
     @GetMapping("formEditable")
     public String formEditable(
-            @RequestParam int IdUsuario, 
-            @RequestParam(required = false) Integer IdDireccion, 
+            @RequestParam int IdUsuario,
+            @RequestParam(required = false) Integer IdDireccion,
             Model model) {
-//Result result = rolDAOImplementation.GetAll();
-        model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
-
-        model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
-
-        //Creamos un usario para que pueda escribir en el
-        model.addAttribute("Usuario", new Usuario());
 
         //return "UsuarioForm";
-        /*if (IdDireccion == null) { //Editar usuario
+        if (IdDireccion == null) { //Editar usuario
 
-        } else if (IdDireccion == 0) { //Editar direccion
+            Result result = usuarioDAOImplementation.GetById(IdUsuario);
 
-        }*/
+            if (result.correct) {
+                model.addAttribute("Usuario", result.object);
+            } else {
+                model.addAttribute("Usuario", null);
+            }
+
+            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+
+            model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
+
+            //model.addAttribute("Usuario", new Usuario());
+        } else if (IdDireccion == 0) { //Agregar direccion
+
+         Result result = usuarioDAOImplementation.GetId(IdUsuario);
+
+           if (result.correct) {
+               model.addAttribute("Usuario", result.object);
+            } else {
+               model.addAttribute("Usuario", null);
+            }
+           
+           //Recuperamos el Id del usuario por medio del request param
+            Usuario usuario = new Usuario();
+            usuario.setIdUsuario(IdUsuario);
+            usuario.Direcciones = new ArrayList<>();
+            usuario.Direcciones.add(new Direccion());
+            
+            model.addAttribute("Usuario", usuario);
+            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+
+            model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
+
+            //model.addAttribute("Usuario", new Usuario());
+        } else {// Editar direccion
+
+            Result result = usuarioDAOImplementation.DireccionGetByIdDireccion(IdDireccion);
+
+            if (result.correct) {
+
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(IdUsuario);
+                usuario.setDirecciones(new ArrayList<>());
+                usuario.getDirecciones().add((Direccion) result.object);
+
+                model.addAttribute("Usuario", usuario);
+                model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
+            } else {
+                model.addAttribute("Usuario", null);
+            }
+
+            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+
+            //model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
+
+            //Creamos un usario para que pueda escribir en el
+            //model.addAttribute("Usuario", new Usuario());
+        }
 
         return "UsuarioForm";
 
     }
-    
-    
+
     //Proceso de agregado
     @PostMapping("add")
     public String Add(@Valid
             @ModelAttribute("Usuario") Usuario usuario,
             BindingResult bindingResult,
-             Model model) {
+            Model model,
+            @RequestParam int IdUsuario,
+            @RequestParam(required = false) Integer IdDireccion) {
+
+        if (IdUsuario == 0 && IdDireccion == 0) { //Agregar usuario
+            //return "Index";
+        }
+        
+        if (IdUsuario > 0) {
+            if (IdDireccion == -1) { //Editar direccion
+                
+            } else if (IdDireccion == 0) { //Agregar direccion
+                
+            } else { //Editar direccion
+                
+            }
+        }
+        
+        
+        
+        
+        //Si bindingResult tiene errores...
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("Usuario", usuario);
+
+            //Volver a pintar la lista de roles
+            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+
+            return "UsuarioForm";
+        } else {
+            //Autoinferencia
+            Result result = usuarioDAOImplementation.Add(usuario);
+
+            return "redirect:/usuario"; 
+        }
+    }
+    
+    
+    //Proceso de agregado
+    /*@PostMapping("add")
+    public String Add(@Valid
+            @ModelAttribute("Usuario") Usuario usuario,
+            BindingResult bindingResult,
+            Model model) {
 
         //Si bindingResult tiene errores...
         if (bindingResult.hasErrors()) {
@@ -163,7 +258,9 @@ public class UsuarioController {
 
             return "redirect:/usuario";
         }
-    }
+    }*/
+    
+    
 
     //DropdownList Pais
     @GetMapping("getEstadosByIdPais/{IdPais}")

@@ -20,6 +20,16 @@ public class Estado {
         this.Nombre = nombre;
         //this.IdPais = IdPais;
     }
+
+    public Pais getPais() {
+        return Pais;
+    }
+
+    public void setPais(Pais Pais) {
+        this.Pais = Pais;
+    }
+    
+    
     
     //Getter y Setter de idColonia
     public void setIdEstado(int idEstado) {

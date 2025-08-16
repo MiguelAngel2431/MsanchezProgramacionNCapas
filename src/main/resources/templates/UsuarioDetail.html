@@ -103,7 +103,7 @@
                 <div class="directions col-lg-8 col-md-8 col-sm-8" style="height: 430px">
                     
                     <!-- Agregar direccion -->
-                    <!--<a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success btn-util">Agregar direccion<i class="bi bi-pencil-square"></i></a>-->
+                    <a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success btn-util">Agregar direccion<i class="bi bi-pencil-square"></i></a>
                     <center><h1 class="directions-title">Direcciones</h1></center>
                     <br>
                     <div class="table-responsive">
@@ -128,7 +128,7 @@
                                     <!-- Util -->
                                     <td>
                                         <!-- Editar direccion -->
-                                        <!--<a th:href="|@{/usuario/formEditable?IdDireccion=}${direccion.IdDireccion}&IdUsuario=${usuario.IdUsuario}|" class="btn btn-warning btn-util"><i class="bi bi-pencil-square"></i></a>-->
+                                        <a th:href="|@{/usuario/formEditable?IdDireccion=}${direccion.IdDireccion}&IdUsuario=${usuario.IdUsuario}|" class="btn btn-warning btn-util"><i class="bi bi-pencil-square"></i></a>
                                         <!-- Eliminar direccion -->
                                         <a class="btn btn-danger btn-util"><i class="bi bi-trash3-fill"></i></a>
                                     </td>

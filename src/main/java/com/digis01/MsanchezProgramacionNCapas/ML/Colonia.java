@@ -22,6 +22,15 @@ public class Colonia {
         this.CodigoPostal=  codigoPostal;
         //this.IdMunicipio = idMunicipio;
     }
+
+    public Municipio getMunicipio() {
+        return Municipio;
+    }
+
+    public void setMunicipio(Municipio Municipio) {
+        this.Municipio = Municipio;
+    }
+    
     
     //Getter y Setter de idColonia
     public void setIdColonia(int idColonia) {

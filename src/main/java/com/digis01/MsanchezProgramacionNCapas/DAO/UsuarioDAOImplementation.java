@@ -316,4 +316,195 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         return result;
     }
 
+    @Override
+    public Result GetById(int idUsuario) {
+        Result result = new Result();
+
+        try {
+            jdbcTemplate.execute("{CALL UsuarioGetById(?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
+
+                callableStatement.setInt(1, idUsuario);
+                callableStatement.registerOutParameter(2, java.sql.Types.REF_CURSOR);
+
+                callableStatement.execute();
+
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(2);
+
+                //Ya no se pone un while porque solo es un usuario
+                if (resultSet.next()) {
+
+                    Usuario usuario = new Usuario();
+
+                    usuario.setIdUsuario(resultSet.getInt("IdUsuario"));
+                    usuario.setUserName(resultSet.getString("UserName"));
+                    usuario.setNombre(resultSet.getString("Nombre"));
+                    usuario.setApellidoPaterno(resultSet.getString("ApellidoPaterno"));
+                    usuario.setApellidoMaterno(resultSet.getString("ApellidoMaterno"));
+                    usuario.setEmail(resultSet.getString("Email"));
+                    usuario.setPassword(resultSet.getString("Password"));
+                    usuario.setFechaNacimiento(resultSet.getDate("FechaNacimiento"));
+                    usuario.setSexo(resultSet.getString("Sexo"));
+                    usuario.setTelefono(resultSet.getString("Telefono"));
+                    usuario.setCelular(resultSet.getString("Celular"));
+                    usuario.setCurp(resultSet.getString("Curp"));
+                    usuario.setIdRol(resultSet.getInt("IdRol"));
+
+                    usuario.Direcciones = new ArrayList<>();
+   
+                    usuario.Direcciones.add(new Direccion(-1));
+                  
+                    result.object = usuario;
+
+                }
+
+                result.correct = true;
+
+                return 1;
+            });
+
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
+        return result;
+    }
+
+    @Override
+    public Result DireccionGetByIdDireccion(int idDireccion) {
+        Result result = new Result();
+
+        try {
+            jdbcTemplate.execute("{CALL DireccionGetByIdDireccionJoin(?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
+
+            callableStatement.setInt(1, idDireccion);
+            callableStatement.registerOutParameter(2, java.sql.Types.REF_CURSOR);
+
+            callableStatement.execute();
+
+            ResultSet resultSet = (ResultSet) callableStatement.getObject(2); //Casteo
+
+            result.objects = new ArrayList<>(); //Se pone afuera del while porque si no, va a estar reescribiendo la lista
+
+            while (resultSet.next()) {
+
+                Direccion direccion = new Direccion();
+               
+                direccion.setIdUsuario(resultSet.getInt("IdUsuario"));
+                direccion.setIdDireccion(resultSet.getInt("IdDireccion"));
+                direccion.setCalle(resultSet.getString("Calle"));
+                direccion.setNumeroInterior(resultSet.getString("NumeroInterior"));
+                direccion.setNumeroExterior(resultSet.getString("NumeroExterior"));
+                
+                direccion.Colonia = new Colonia();
+                        direccion.Colonia.setIdColonia(resultSet.getInt("IdColonia"));
+                        direccion.Colonia.setNombre(resultSet.getString("NombreColonia")); //Alias
+                        direccion.Colonia.setCodigoPostal(resultSet.getString("CodigoPostal"));
+                        //direccion.Colonia.setIdMunicipio(resultSet.getInt("IdMunicipio"));
+
+                        direccion.Colonia.Municipio = new Municipio();
+
+                        direccion.Colonia.Municipio.setIdMunicipio(resultSet.getInt("IdMunicipio"));
+                        direccion.Colonia.Municipio.setNombre(resultSet.getString("NombreMunicipio"));
+
+                        direccion.Colonia.Municipio.Estado = new Estado();
+
+                        direccion.Colonia.Municipio.Estado.setIdEstado(resultSet.getInt("IdEstado"));
+                        direccion.Colonia.Municipio.Estado.setNombre(resultSet.getString("NombreEstado"));
+
+                        direccion.Colonia.Municipio.Estado.Pais = new Pais();
+
+                        direccion.Colonia.Municipio.Estado.Pais.setIdPais(resultSet.getInt("IdPais"));
+                        direccion.Colonia.Municipio.Estado.Pais.setNombre(resultSet.getString("NombrePais"));
+                        
+                        
+                //Recuperar los dropdowns en cascada
+
+               /* direccion.Colonia.Municipio = new Municipio();
+                
+                direccion.Colonia.Municipio.setIdMunicipio(resultSet.getInt("IdMunicipio"));
+                
+                direccion.Colonia.Municipio.Estado = new Estado();
+                
+                direccion.Colonia.Municipio.Estado.setIdEstado(resultSet.getInt("IdEstado"));
+                
+                direccion.Colonia.Municipio.Estado.Pais = new Pais();
+                
+                direccion.Colonia.Municipio.Estado.Pais.setIdPais(resultSet.getInt("IdPais"));*/ 
+               
+                
+
+                result.object = direccion;
+            }
+
+            result.correct = true;
+
+                return 1;
+            });
+
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
+        return result;
+    }
+
+    @Override
+    public Result GetId(int idUsuario) {
+        Result result = new Result();
+
+        try {
+            jdbcTemplate.execute("{CALL UsuarioGetById(?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
+
+                callableStatement.setInt(1, idUsuario);
+                callableStatement.registerOutParameter(2, java.sql.Types.REF_CURSOR);
+
+                callableStatement.execute();
+
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(2);
+
+                //Ya no se pone un while porque solo es un usuario
+                if (resultSet.next()) {
+
+                    Usuario usuario = new Usuario();
+
+                    usuario.setIdUsuario(resultSet.getInt("IdUsuario"));
+                    /*usuario.setUserName(resultSet.getString("UserName"));
+                    usuario.setNombre(resultSet.getString("Nombre"));
+                    usuario.setApellidoPaterno(resultSet.getString("ApellidoPaterno"));
+                    usuario.setApellidoMaterno(resultSet.getString("ApellidoMaterno"));
+                    usuario.setEmail(resultSet.getString("Email"));
+                    usuario.setPassword(resultSet.getString("Password"));
+                    usuario.setFechaNacimiento(resultSet.getDate("FechaNacimiento"));
+                    usuario.setSexo(resultSet.getString("Sexo"));
+                    usuario.setTelefono(resultSet.getString("Telefono"));
+                    usuario.setCelular(resultSet.getString("Celular"));
+                    usuario.setCurp(resultSet.getString("Curp"));
+                    usuario.setIdRol(resultSet.getInt("IdRol"));*/
+
+                    usuario.Direcciones = new ArrayList<>();
+   
+                    usuario.Direcciones.add(new Direccion(0));
+                  
+                    result.object = usuario;
+
+                }
+
+                result.correct = true;
+
+                return 1;
+            });
+
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
+        return result;
+    }
+
 }

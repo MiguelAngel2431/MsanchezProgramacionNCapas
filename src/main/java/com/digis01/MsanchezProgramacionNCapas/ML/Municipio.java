@@ -21,6 +21,16 @@ public class Municipio {
         this.Nombre = nombre;
         //this.idEstado = idEstado;
     }
+
+    public Estado getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(Estado Estado) {
+        this.Estado = Estado;
+    }
+    
+    
     
     //Getter y Setter de idMunicipio
     public void setIdMunicipio(int idMunicipio) {
