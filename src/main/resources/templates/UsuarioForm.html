@@ -15,9 +15,9 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
         <!-- Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <!--<link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playwrite+AU+NSW:wght@100..400&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playwrite+AU+NSW:wght@100..400&display=swap" rel="stylesheet">-->
 
         <style>
 
@@ -50,19 +50,19 @@
                 font-style: normal;
             }
 
-            .subtitle {
+            /*.subtitle {
                 text-transform: uppercase;
                 font-family: "Bebas Neue", sans-serif;
                 font-size: 40px;
                 font-style: normal;
-            }
+            }*/
 
-            label {
+            /*label {
                 font-family: "Playwrite AU NSW", cursive;
                 font-optical-sizing: auto;
                 font-style: normal;
                 font-weight: bold;
-            }
+            }*/
 
             .form-group {
                 padding: 10px;
@@ -121,7 +121,7 @@
     </head>
     <body>
         <div class="container">
-            <form method="post" th:object="${Usuario}" th:action="|@{/usuario/add?IdDireccion=}*{Direcciones[0].IdDireccion}&IdUsuario=*{IdUsuario}|">
+            <form method="post" th:object="${Usuario}" th:action="@{/usuario/add}">
             <!--<form method="post" th:object="${Usuario}" th:action="@{/usuario/add}">-->
                 <center><h1 class="title">Registro</h1></center>
 
@@ -374,7 +374,7 @@
                             <!-- Colonia -->
                             <div class="form-group col-3">
                                 <label for="usr">Colonia:</label>
-                                <select class="form-control" id="selectColonia" /*th:field="*{Direcciones[0].Colonia.IdColonia}"*/>
+                                <select class="form-control" id="selectColonia" th:field="*{Direcciones[0].Colonia.IdColonia}">
                                     <option value=0 selected>Selecciona Colonia</option>
 
                                 </select>

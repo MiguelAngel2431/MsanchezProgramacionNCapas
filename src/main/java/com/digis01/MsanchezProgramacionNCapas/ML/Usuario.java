@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class Usuario {
     
-    @NotNull()
+    //@NotNull()
     private int IdUsuario;
     
     @Size(min = 4, max = 20, message = "Texto de entre 4 y 20 letras")
@@ -36,7 +36,7 @@ public class Usuario {
     @Pattern(regexp = "^[^_|0-9|\\s]+[a-zA-Z0-9]+$", message = "Username invalido")
     private String UserName;
     
-    @Pattern(regexp = "^[a-zA-Z-0-9]+[^-|\\s]+@[a-zA-Z]+\\.[a-z]+", message = "Formato de correo invalido")
+//    @Pattern(regexp = "^[a-zA-Z-0-9]+[^-|\\s]+@[a-zA-Z]+\\.[a-z]+", message = "Formato de correo invalido")
     @NotEmpty(message = "Informacion requerida")
     private String Email;
     private String Password;

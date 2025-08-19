@@ -103,7 +103,9 @@ public class UsuarioController {
             model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
 
             //Creamos un usario para que pueda escribir en el
-            model.addAttribute("Usuario", new Usuario());
+            Usuario usuario = new Usuario();
+            usuario.Direcciones = new ArrayList<>();
+            model.addAttribute("Usuario", usuario);
 
             return "UsuarioForm";
 
@@ -145,20 +147,20 @@ public class UsuarioController {
             //model.addAttribute("Usuario", new Usuario());
         } else if (IdDireccion == 0) { //Agregar direccion
 
-         Result result = usuarioDAOImplementation.GetId(IdUsuario);
+            Result result = usuarioDAOImplementation.GetId(IdUsuario);
 
-           if (result.correct) {
-               model.addAttribute("Usuario", result.object);
+            if (result.correct) {
+                model.addAttribute("Usuario", result.object);
             } else {
-               model.addAttribute("Usuario", null);
+                model.addAttribute("Usuario", null);
             }
-           
-           //Recuperamos el Id del usuario por medio del request param
+
+            //Recuperamos el Id del usuario por medio del request param
             Usuario usuario = new Usuario();
             usuario.setIdUsuario(IdUsuario);
             usuario.Direcciones = new ArrayList<>();
             usuario.Direcciones.add(new Direccion());
-            
+
             model.addAttribute("Usuario", usuario);
             model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
 
@@ -178,6 +180,7 @@ public class UsuarioController {
 
                 model.addAttribute("Usuario", usuario);
                 model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
+//                estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais())
             } else {
                 model.addAttribute("Usuario", null);
             }
@@ -185,7 +188,6 @@ public class UsuarioController {
             model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
 
             //model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
-
             //Creamos un usario para que pueda escribir en el
             //model.addAttribute("Usuario", new Usuario());
         }
@@ -199,27 +201,64 @@ public class UsuarioController {
     public String Add(@Valid
             @ModelAttribute("Usuario") Usuario usuario,
             BindingResult bindingResult,
-            Model model,
-            @RequestParam int IdUsuario,
-            @RequestParam(required = false) Integer IdDireccion) {
+            Model model) {
 
-        if (IdUsuario == 0 && IdDireccion == 0) { //Agregar usuario
-            //return "Index";
-        }
-        
-        if (IdUsuario > 0) {
-            if (IdDireccion == -1) { //Editar direccion
-                
-            } else if (IdDireccion == 0) { //Agregar direccion
-                
-            } else { //Editar direccion
-                
+        if (usuario.getIdUsuario() == 0) { //Agregar usuario
+            //Si bindingResult tiene errores...
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("Usuario", usuario);
+
+                //Volver a pintar la lista de roles
+                model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+
+                return "UsuarioForm";
+            } else {
+                //Autoinferencia
+                Result result = usuarioDAOImplementation.Add(usuario);
+
+                return "redirect:/usuario";
             }
         }
-        
-        
-        
-        
+
+        if (usuario.getIdUsuario() > 0) {
+            if (usuario.Direcciones.get(0).getIdDireccion() == -1) { //Editar usuario
+                //Si bindingResult tiene errores...
+                //if (bindingResult.hasErrors()) {
+                model.addAttribute("Usuario", usuario);
+
+                //Volver a pintar la lista de roles
+                model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+
+                //return "UsuarioForm";
+                //} else {
+                //Autoinferencia
+                Result result = usuarioDAOImplementation.EditarUsuario(usuario);
+
+                return "redirect:/usuario";
+                //}
+
+            } else if (usuario.Direcciones.get(0).getIdDireccion() == 0) { //Agregar direccion
+                //Si bindingResult tiene errores...
+                //if (bindingResult.hasErrors()) {
+                model.addAttribute("Usuario", usuario);
+
+                //return "UsuarioForm";
+                //} else {
+                //Autoinferencia
+                Result result = usuarioDAOImplementation.AgregarDireccion(usuario);
+
+                return "redirect:/usuario";
+                //}
+            } else { //Editar direccion
+
+                //Autoinferencia
+                Result result = usuarioDAOImplementation.EditarDireccion(usuario);
+
+                return "redirect:/usuario";
+
+            }
+        }
+
         //Si bindingResult tiene errores...
         if (bindingResult.hasErrors()) {
             model.addAttribute("Usuario", usuario);
@@ -232,11 +271,33 @@ public class UsuarioController {
             //Autoinferencia
             Result result = usuarioDAOImplementation.Add(usuario);
 
-            return "redirect:/usuario"; 
+            return "redirect:/usuario";
         }
     }
     
     
+    
+    
+    //Proceso de eliminado de direccion
+    @GetMapping("/delete/{IdDireccion}")
+    public String Delete(Model model, @PathVariable("IdDireccion") int idDireccion) {
+
+            
+            Result result = usuarioDAOImplementation.EliminarDireccion(idDireccion);
+
+            return "redirect:/usuario";    
+    }
+    
+    //Proceso de eliminado de usuario
+    @GetMapping("/EliminarUsuario/{IdUsuario}")
+    public String EliminarUsuario(Model model, @PathVariable("IdUsuario") int idUsuario) {
+
+            
+            Result result = usuarioDAOImplementation.EliminarUsuario(idUsuario);
+
+            return "redirect:/usuario";    
+    }
+
     //Proceso de agregado
     /*@PostMapping("add")
     public String Add(@Valid
@@ -259,9 +320,6 @@ public class UsuarioController {
             return "redirect:/usuario";
         }
     }*/
-    
-    
-
     //DropdownList Pais
     @GetMapping("getEstadosByIdPais/{IdPais}")
     @ResponseBody //Retorna un dato estructurado - JSON
