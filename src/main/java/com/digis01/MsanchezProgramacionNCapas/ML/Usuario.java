@@ -57,6 +57,8 @@ public class Usuario {
     public Rol Rol; //Propiedad de navegacion (no ocupa setter ni getter, porque es public)
     
     public List<Direccion> Direcciones;
+    
+    private String Imagen;
 
     //Constructores
     public Usuario() {
@@ -226,12 +228,22 @@ public class Usuario {
         return Rol;
     }
     
+    //Getter y Setter de la lista de Direcciones
     public List<Direccion> getDirecciones() {
         return Direcciones;
     }
 
     public void setDirecciones(List<Direccion> Direcciones) {
         this.Direcciones = Direcciones;
+    }
+    
+    //Getter y Setter de imagen
+    public void setImagen(String imagen) {
+        this.Imagen = imagen;
+    }
+    
+    public String getImagen() {
+        return this.Imagen;
     }
     
     

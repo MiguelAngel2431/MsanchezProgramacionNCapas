@@ -8,13 +8,21 @@ import com.digis01.MsanchezProgramacionNCapas.DAO.RolDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.UsuarioDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.ML.Colonia;
 import com.digis01.MsanchezProgramacionNCapas.ML.Direccion;
+import com.digis01.MsanchezProgramacionNCapas.ML.ErrorCM;
 import com.digis01.MsanchezProgramacionNCapas.ML.Estado;
 import com.digis01.MsanchezProgramacionNCapas.ML.Municipio;
 import com.digis01.MsanchezProgramacionNCapas.ML.Pais;
 import com.digis01.MsanchezProgramacionNCapas.ML.Result;
+import com.digis01.MsanchezProgramacionNCapas.ML.Rol;
 import com.digis01.MsanchezProgramacionNCapas.ML.Usuario;
 import jakarta.validation.Valid;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +34,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("usuario")
@@ -105,6 +114,7 @@ public class UsuarioController {
             //Creamos un usario para que pueda escribir en el
             Usuario usuario = new Usuario();
             usuario.Direcciones = new ArrayList<>();
+            usuario.Direcciones.add(new Direccion());
             model.addAttribute("Usuario", usuario);
 
             return "UsuarioForm";
@@ -201,7 +211,8 @@ public class UsuarioController {
     public String Add(@Valid
             @ModelAttribute("Usuario") Usuario usuario,
             BindingResult bindingResult,
-            Model model) {
+            Model model,
+            @RequestParam("imagenFile") MultipartFile imagen) {
 
         if (usuario.getIdUsuario() == 0) { //Agregar usuario
             //Si bindingResult tiene errores...
@@ -213,6 +224,25 @@ public class UsuarioController {
 
                 return "UsuarioForm";
             } else {
+                
+                //Imagen
+                if (imagen != null) {
+                    String nombre = imagen.getOriginalFilename();
+                    //archivo.jpg
+                    //[archivo,jpg]
+                    String extension = nombre.split("\\.")[1];
+                    if (extension.equals("jpg")) {
+                        try {
+                            byte[] bytes = imagen.getBytes();
+                            String base64Image = Base64.getEncoder().encodeToString(bytes);
+                            usuario.setImagen(base64Image);
+                        } catch (Exception ex) {
+                            System.out.println("Error");
+                        }
+
+                    }
+                }
+
                 //Autoinferencia
                 Result result = usuarioDAOImplementation.Add(usuario);
 
@@ -231,6 +261,25 @@ public class UsuarioController {
 
                 //return "UsuarioForm";
                 //} else {
+                
+                //Imagen
+                if (imagen != null) {
+                    String nombre = imagen.getOriginalFilename();
+                    //archivo.jpg
+                    //[archivo,jpg]
+                    String extension = nombre.split("\\.")[1];
+                    if (extension.equals("jpg")) {
+                        try {
+                            byte[] bytes = imagen.getBytes();
+                            String base64Image = Base64.getEncoder().encodeToString(bytes);
+                            usuario.setImagen(base64Image);
+                        } catch (Exception ex) {
+                            System.out.println("Error");
+                        }
+
+                    }
+                }
+                
                 //Autoinferencia
                 Result result = usuarioDAOImplementation.EditarUsuario(usuario);
 
@@ -274,28 +323,23 @@ public class UsuarioController {
             return "redirect:/usuario";
         }
     }
-    
-    
-    
-    
+
     //Proceso de eliminado de direccion
     @GetMapping("/delete/{IdDireccion}")
     public String Delete(Model model, @PathVariable("IdDireccion") int idDireccion) {
 
-            
-            Result result = usuarioDAOImplementation.EliminarDireccion(idDireccion);
+        Result result = usuarioDAOImplementation.EliminarDireccion(idDireccion);
 
-            return "redirect:/usuario";    
+        return "redirect:/usuario";
     }
-    
+
     //Proceso de eliminado de usuario
     @GetMapping("/EliminarUsuario/{IdUsuario}")
     public String EliminarUsuario(Model model, @PathVariable("IdUsuario") int idUsuario) {
 
-            
-            Result result = usuarioDAOImplementation.EliminarUsuario(idUsuario);
+        Result result = usuarioDAOImplementation.EliminarUsuario(idUsuario);
 
-            return "redirect:/usuario";    
+        return "redirect:/usuario";
     }
 
     //Proceso de agregado
@@ -342,6 +386,95 @@ public class UsuarioController {
     public Result ColoniaByIdMunicipio(@PathVariable int IdMunicipio) {
 
         return coloniaDAOImplementation.ColoniaByIdMunicipio(IdMunicipio);
+    }
+    
+    @GetMapping("cargamasiva")
+    public String CargaMasiva() {
+        return "CargaMasiva";
+    }
+    
+    @PostMapping("cargamasiva")
+    public String CargaMasiva(@RequestParam("archivo") MultipartFile file) {
+        
+        if (file.getOriginalFilename().split("\\.")[1].equals("txt")) {
+            List<Usuario> usuarios = ProcesarTXT(file);
+            List<ErrorCM> errores = ValidarDatos(usuarios);
+            
+            
+        } else {
+            //Excel
+        }
+        
+        return "CargaMasiva";
+        
+    }
+    
+    private List<Usuario> ProcesarTXT(MultipartFile file) {
+        try {
+            InputStream inputStream = file.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            
+            String linea = "";
+            List<Usuario> usuarios = new ArrayList<>();
+            
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy"); 
+            
+            //Mientras haya usuarios... 
+            while ((linea = bufferedReader.readLine()) != null) {
+                String[] campos = linea.split("\\|");
+                Usuario usuario = new Usuario();
+                usuario.setUserName(campos[0]);
+                usuario.setNombre(campos[1]);
+                usuario.setApellidoPaterno(campos[2]);
+                usuario.setApellidoMaterno(campos[3]);
+                usuario.setEmail(campos[4]);
+                usuario.setPassword(campos[5]);
+                usuario.setFechaNacimiento(simpleDateFormat.parse(campos[6]));
+                usuario.setSexo(campos[7]);
+                usuario.setTelefono(campos[8]);
+                usuario.setCelular(campos[9]);
+                usuario.setCurp(campos[10]);
+                
+                usuario.Rol = new Rol();
+                usuario.Rol.setIdRol(Integer.parseInt(campos[11]));
+                
+                usuario.Direcciones = new ArrayList<>();
+                Direccion direccion = new Direccion();
+                
+                direccion.setCalle(campos[12]);
+                direccion.setNumeroInterior(campos[13]);
+                direccion.setNumeroExterior(campos[14]);
+                
+                direccion.Colonia = new Colonia();
+                
+                usuarios.add(usuario);
+                usuario.Direcciones.add(direccion);
+                
+            }
+            
+            return usuarios;
+            
+        } catch (Exception ex) {
+            System.out.println("Error");
+            return null;
+        }
+    }
+    
+    private List<ErrorCM> ValidarDatos(List<Usuario> usuarios) {
+        List<ErrorCM> errores = new ArrayList<>();
+        int linea = 1;
+        for (Usuario usuario : usuarios) {
+            if (usuario.getUserName() == null || usuario.getUserName() == "") {
+                ErrorCM errorCM = new ErrorCM(linea, usuario.getUserName(), "Campo obligatorio");
+                errores.add(errorCM);
+                
+            }
+            
+            linea++;
+            
+        }
+        
+        return errores;
     }
 
 }

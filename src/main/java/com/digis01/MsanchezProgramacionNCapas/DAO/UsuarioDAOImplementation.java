@@ -96,12 +96,14 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                         usuario.setCelular(resultSet.getString("Celular"));
                         usuario.setCurp(resultSet.getString("Curp"));
                         usuario.setIdRol(resultSet.getInt("IdRol"));
+                        //usuario.setImagen(resultSet.getString("Imagen"));
 
                         usuario.Rol = new Rol();
 
                         //Aislamos los datos de la otra tabla (rol)
                         usuario.Rol.setIdRol(resultSet.getInt("IdRol"));
                         usuario.Rol.setNombre(resultSet.getString("NombreRol")); //Alias
+                        usuario.setImagen(resultSet.getString("Imagen"));
 
                         int idDireccion;
 
@@ -203,7 +205,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                     //Aislamos los datos de la otra tabla (rol)
                     usuario.Rol.setIdRol(resultSet.getInt("IdRol"));
                     usuario.Rol.setNombre(resultSet.getString("NombreRol")); //Alias
-
+                    usuario.setImagen(resultSet.getString("Imagen"));
                     int idDireccion;
 
                     //Si el numero de direcciones es diferente de cero
@@ -272,7 +274,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         Result result = new Result();
 
         try {
-            result.correct = jdbcTemplate.execute("CALL UsuarioDireccionAdd(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (CallableStatementCallback<Boolean>) callableStatement -> {
+            result.correct = jdbcTemplate.execute("CALL UsuarioDireccionAdd(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (CallableStatementCallback<Boolean>) callableStatement -> {
 
                 callableStatement.setString(1, usuario.getUserName());
                 callableStatement.setString(2, usuario.getNombre());
@@ -286,12 +288,13 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                 callableStatement.setString(10, usuario.getCelular());
                 callableStatement.setString(11, usuario.getCurp());
                 callableStatement.setInt(12, usuario.Rol.getIdRol());
+                callableStatement.setString(13, usuario.getImagen());
 
-                callableStatement.setString(13, usuario.Direcciones.get(0).getCalle());
-                callableStatement.setString(14, usuario.Direcciones.get(0).getNumeroInterior());
-                callableStatement.setString(15, usuario.Direcciones.get(0).getNumeroExterior());
+                callableStatement.setString(14, usuario.Direcciones.get(0).getCalle());
+                callableStatement.setString(15, usuario.Direcciones.get(0).getNumeroInterior());
+                callableStatement.setString(16, usuario.Direcciones.get(0).getNumeroExterior());
 
-                callableStatement.setInt(16, usuario.Direcciones.get(0).Colonia.getIdColonia());
+                callableStatement.setInt(17, usuario.Direcciones.get(0).Colonia.getIdColonia());
 
                 int isCorrect = callableStatement.executeUpdate();
 
@@ -344,6 +347,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                     usuario.setCelular(resultSet.getString("Celular"));
                     usuario.setCurp(resultSet.getString("Curp"));
                     usuario.setIdRol(resultSet.getInt("IdRol"));
+                    //usuario.setImagen(resultSet.getString("Imagen"));
 
                     usuario.Direcciones = new ArrayList<>();
 
@@ -540,7 +544,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         Result result = new Result();
 
         try {
-            jdbcTemplate.execute("{CALL UsuarioUpdate(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
+            jdbcTemplate.execute("{CALL UsuarioUpdate(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
 
                 callableStatement.setString(2, usuario.getUserName());
                 callableStatement.setString(3, usuario.getNombre());
@@ -554,6 +558,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                 callableStatement.setString(11, usuario.getCelular());
                 callableStatement.setString(12, usuario.getCurp());
                 callableStatement.setInt(13, usuario.Rol.getIdRol());
+                callableStatement.setString(14, usuario.getImagen());
                 
                 callableStatement.setInt(1, usuario.getIdUsuario());
 
