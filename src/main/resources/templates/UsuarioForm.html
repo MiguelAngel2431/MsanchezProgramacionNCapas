@@ -133,7 +133,9 @@
                 <!-- Titulo para Editar direccion -->
                 <div th:if="*{IdUsuario != 0}">
                     <div th:if="*{Direcciones[0].IdDireccion} != -1 ">
-                        <center><h1 class="title">Editar direccion</h1></center>
+                        <div th:if="*{Direcciones[0].IdDireccion} != 0 ">
+                            <center><h1 class="title">Editar direccion</h1></center>
+                        </div>
                     </div>
                 </div>
 
@@ -226,7 +228,7 @@
                                 <label for="usr">Rol:</label>
                                 <select class="form-control" id="sel1" th:field="*{Rol.IdRol}">
                                     <option value="0" selected>Selecciona Rol</option>
-                                    <option th:each="rol : ${roles}" th:text="${rol.Nombre}" th:value="${rol.IdRol}"  th:field="*{Rol.IdRol}">One</option>
+                                    <option th:each="rol : ${roles}" th:text="${rol.Nombre}" th:value="${rol.IdRol}">One</option>
                                 </select>
                             </div>
 
@@ -272,7 +274,7 @@
                             </div>
 
                             <!-- Contraseña -->
-                            <div class="form-group col-6">
+                            <div class="form-group col-6" th:if="*{(IdUsuario == 0 && Direcciones[0].IdDireccion == 0)}">
                                 <label for="usr">Contraseña:</label>
                                 <input type="password" class="form-control" id="inputPassword" placeholder="Ingresa contraseña" th:field="*{Password}" onkeyup="SecurePassword(event, this)">
                                 <span class="error-msg-lenght msg-error"></span>
@@ -284,7 +286,7 @@
                             </div>
 
                             <!-- Confirmar Contraseña -->
-                            <div class="form-group col-6">
+                            <div class="form-group col-6" th:if="*{(IdUsuario == 0 && Direcciones[0].IdDireccion == 0)}">
                                 <label for="usr">Confirmar contraseña:</label>
                                 <input type="password" class="form-control" id="inputConfirmPassword" placeholder="Ingresa contraseña" onblur="VerificarPasswords(event, this)">
                                 <span class="error-msg"></span>
@@ -411,25 +413,27 @@
                         <center><button type="submit" class="btn btn-success btn-add">Agregar</button></center>
                     </div>
                 </div>
-                
+
                 <!-- Boton para Editar usuario -->
                 <div th:if="*{IdUsuario != 0}">
                     <div th:if="*{Direcciones[0].IdDireccion}  == -1 ">
                         <center><button type="submit" class="btn btn-success btn-add">Actualizar</button></center>
                     </div>
                 </div>
-                
+
                 <!-- Boton para Agregar direccion -->
                 <div th:if="*{IdUsuario} != 0">
                     <div th:if="*{Direcciones[0].IdDireccion} == 0 ">
                         <center><button type="submit" class="btn btn-success btn-add">Agregar</button></center>
                     </div>
                 </div>
-                
+
                 <!-- Boton para Editar direccion -->
                 <div th:if="*{IdUsuario } != 0">
                     <div th:if="*{Direcciones[0].IdDireccion} != -1 ">
-                        <center><button type="submit" class="btn btn-success btn-add">Actualizar</button></center>
+                        <div th:if="*{Direcciones[0].IdDireccion} != 0 ">
+                            <center><button type="submit" class="btn btn-success btn-add">Actualizar</button></center>
+                        </div>
                     </div>
                 </div>
 
