@@ -544,21 +544,21 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         Result result = new Result();
 
         try {
-            jdbcTemplate.execute("{CALL UsuarioUpdate(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
+            jdbcTemplate.execute("{CALL UsuarioUpdate(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
 
                 callableStatement.setString(2, usuario.getUserName());
                 callableStatement.setString(3, usuario.getNombre());
                 callableStatement.setString(4, usuario.getApellidoPaterno());
                 callableStatement.setString(5, usuario.getApellidoMaterno());
                 callableStatement.setString(6, usuario.getEmail());
-                callableStatement.setString(7, usuario.getPassword());
-                callableStatement.setDate(8, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
-                callableStatement.setString(9, usuario.getSexo());
-                callableStatement.setString(10, usuario.getTelefono());
-                callableStatement.setString(11, usuario.getCelular());
-                callableStatement.setString(12, usuario.getCurp());
-                callableStatement.setInt(13, usuario.Rol.getIdRol());
-                callableStatement.setString(14, usuario.getImagen());
+               // callableStatement.setString(7, usuario.getPassword());
+                callableStatement.setDate(7, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
+                callableStatement.setString(8, usuario.getSexo());
+                callableStatement.setString(9, usuario.getTelefono());
+                callableStatement.setString(10, usuario.getCelular());
+                callableStatement.setString(11, usuario.getCurp());
+                callableStatement.setInt(12, usuario.Rol.getIdRol());
+                callableStatement.setString(13, usuario.getImagen());
                 
                 callableStatement.setInt(1, usuario.getIdUsuario());
 

@@ -20,6 +20,13 @@
                 font-size: 50px;
                 font-style: normal;
             }
+            
+            .subtitle {
+                text-transform: uppercase;
+                font-family: "Bebas Neue", sans-serif;
+                font-size: 30px;
+                font-style: normal;
+            }
 
             .btn-add-user {
                 width: 180px;
@@ -50,7 +57,7 @@
             .td-nombreUser{
                 font-weight: bold;
             }
-            
+
             .image-user {
                 width: 100px;
                 height: 100px;
@@ -68,6 +75,16 @@
             <br>
             <center><h1 class="title">Usuarios</h1></center>
             <br>
+            
+            <h2 class="mb-4 subtitle">Buscar en Tabla</h2>
+            <!-- Campo de búsqueda -->
+            <input
+                type="text"
+                id="searchInput"
+                class="form-control mb-3"
+                placeholder="¿Buscas a alguien?..."
+                />
+           
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                     <thead class="table-dark">
@@ -80,7 +97,7 @@
                             <th scope="col">Contacto</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tableBody">
                         <tr th:each="usuario : ${usuarios}">
                             <!-- Util -->
                             <td>
@@ -126,5 +143,36 @@
                 </table>
             </div>
         </div>
+        
+        <script>
+    // Referencia al campo de búsqueda y al cuerpo de la tabla
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('tableBody');
+
+    // Evento para filtrar la tabla
+    searchInput.addEventListener('keyup', function () {
+      const filter = searchInput.value.toLowerCase(); // Texto ingresado en minúsculas
+      const rows = tableBody.getElementsByTagName('tr'); // Todas las filas de la tabla
+
+      for (let row of rows) {
+        const cells = row.getElementsByTagName('td'); // Todas las celdas de la fila
+        let match = false;
+
+        // Verificar si alguna celda contiene el texto buscado
+        for (let cell of cells) {
+          if (cell.textContent.toLowerCase().includes(filter)) {
+            match = true;
+            break;
+          }
+        }
+
+        // Mostrar u ocultar la fila según si coincide
+        row.style.display = match ? '' : 'none';
+      }
+    });
+  </script>
+        
+        
+        
     </body>
 </html>
