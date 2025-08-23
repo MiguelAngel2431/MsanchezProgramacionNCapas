@@ -74,7 +74,27 @@ public class UsuarioController {
     //Metodo para retornar todos los usarios a la vista
     @GetMapping
     public String Index(Model model) {
-        Result result = usuarioDAOImplementation.GetAll();
+        Result result = usuarioDAOImplementation.GetAll(new Usuario("", "", ""));
+
+        model.addAttribute("usuarioBusqueda", new Usuario());
+
+        if (result.correct) {
+            model.addAttribute("usuarios", result.objects);
+            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+        } else {
+            model.addAttribute("usuarios", null);
+        }
+
+        return "UsuarioIndex"; //Retornamos hacia la vista UsuarioIndex.html
+
+    }
+
+    //Buscador
+    @PostMapping
+    public String Index(@ModelAttribute("usuarioBusqueda") Usuario usuarioBusqueda,
+            Model model) {
+
+        Result result = usuarioDAOImplementation.GetAll(usuarioBusqueda);
 
         if (result.correct) {
             model.addAttribute("usuarios", result.objects);
@@ -128,7 +148,7 @@ public class UsuarioController {
             usuario.Direcciones = new ArrayList<>();
             usuario.Direcciones.add(new Direccion());
             model.addAttribute("Usuario", usuario);
-            
+
             //Poner por default un radiobutton seleccionado
             usuario.setSexo("M ");
 
@@ -162,13 +182,12 @@ public class UsuarioController {
             if (result.correct) {
                 model.addAttribute("Usuario", result.object);
                 model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
-            
+
             } else {
                 model.addAttribute("Usuario", null);
             }
 
             //model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
-
             model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
 
             //model.addAttribute("Usuario", new Usuario());
@@ -206,16 +225,15 @@ public class UsuarioController {
                 usuario.getDirecciones().add((Direccion) result.object);
 
                 model.addAttribute("Usuario", usuario);
-                
+
                 model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
-                //model.addAttribute("estados", estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais()));
+                model.addAttribute("estados", estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais()));
 //                estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais())
             } else {
                 model.addAttribute("Usuario", null);
             }
 
             //model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
-
             //model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
             //Creamos un usario para que pueda escribir en el
             //model.addAttribute("Usuario", new Usuario());
@@ -413,18 +431,18 @@ public class UsuarioController {
 
     @PostMapping("cargamasiva")
     public String CargaMasiva(@RequestParam("archivo") MultipartFile file, Model model, HttpSession session) {
-        
+
         String root = System.getProperty("user.dir");
         String rutaArchivo = "/src/main/resources/archivos/";
         String fechaSubida = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));
         String rutaFinal = root + rutaArchivo + fechaSubida + file.getOriginalFilename();
-        
+
         try {
             file.transferTo(new File(rutaFinal));
         } catch (Exception ex) {
             System.out.println(ex.getLocalizedMessage());
         }
-        
+
         //Txt
         if (file.getOriginalFilename().split("\\.")[1].equals("txt")) {
             List<Usuario> usuarios = ProcesarTXT(new File(rutaFinal));
@@ -438,12 +456,12 @@ public class UsuarioController {
                 model.addAttribute("listaErrores", errores);
                 model.addAttribute("archivoCorrecto", false);
             }
-        
-        //Excel
+
+            //Excel
         } else {
             List<Usuario> usuarios = ProcesarExcel(new File(rutaFinal));
-            List<ErrorCM> errores =ValidarDatos(usuarios);
-            
+            List<ErrorCM> errores = ValidarDatos(usuarios);
+
             if (errores.isEmpty()) {
                 model.addAttribute("listaErrores", errores);
                 model.addAttribute("archivoCorrecto", true);
@@ -462,31 +480,31 @@ public class UsuarioController {
     public String CargaMasiva(HttpSession session) {
         try {
             String ruta = session.getAttribute("path").toString();
-            
+
             List<Usuario> usuarios;
-            
+
             if (ruta.split("\\.")[1].equals("txt")) {
                 usuarios = ProcesarTXT(new File(ruta));
             } else {
                 usuarios = ProcesarExcel(new File(ruta));
             }
-            
+
             for (Usuario usuario : usuarios) {
                 usuarioDAOImplementation.Add(usuario);
             }
-            
+
             session.removeAttribute("path");
-            
+
         } catch (Exception ex) {
             System.out.println(ex.getLocalizedMessage());
         }
-        
+
         return "redirect:/usuario";
     }
-    
+
     private List<Usuario> ProcesarTXT(File file) {
         try {
-            
+
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
             String linea = "";
@@ -504,12 +522,11 @@ public class UsuarioController {
                 usuario.setApellidoMaterno(campos[3]);
                 usuario.setEmail(campos[4]);
                 usuario.setPassword(campos[5]);
-                
-                Date fecha = campos[6] == "" ? null: simpleDateFormat.parse(campos[6]);
+
+                Date fecha = campos[6] == "" ? null : simpleDateFormat.parse(campos[6]);
                 usuario.setFechaNacimiento(fecha);
                 //usuario.setFechaNacimiento(campos[6] != "" ? simpleDateFormat.parse(campos[6]) : simpleDateFormat.parse(campos[6]));
-                
-                
+
                 usuario.setSexo(campos[7]);
                 usuario.setTelefono(campos[8]);
                 usuario.setCelular(campos[9]);
@@ -541,28 +558,27 @@ public class UsuarioController {
             return null;
         }
     }
-    
+
     private List<Usuario> ProcesarExcel(File file) {
         List<Usuario> usuarios = new ArrayList<>();
-        
+
         //Abrimos el excel de forma implicita
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             Sheet sheet = workbook.getSheetAt(0);
-            
+
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            
+
             for (Row row : sheet) {
                 Usuario usuario = new Usuario();
-                
+
                 usuario.setUserName(row.getCell(0) != null ? row.getCell(0).toString() : "");
                 usuario.setNombre(row.getCell(1) != null ? row.getCell(1).toString() : "");
                 usuario.setApellidoPaterno(row.getCell(2) != null ? row.getCell(2).toString() : "");
                 usuario.setApellidoMaterno(row.getCell(3) != null ? row.getCell(3).toString() : "");
                 usuario.setEmail(row.getCell(4) != null ? row.getCell(4).toString() : "");
                 usuario.setPassword(row.getCell(5) != null ? row.getCell(5).toString() : "");
-                
-                
+
                 if (row.getCell(6) != null) {
                     if (row.getCell(6).getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(row.getCell(6))) {
                         usuario.setFechaNacimiento(row.getCell(6).getDateCellValue());
@@ -572,36 +588,36 @@ public class UsuarioController {
                 }
                 //usuario.setFechaNacimiento(row.getCell(6) != null ? row.getCell(6) : "");
                 usuario.setSexo(row.getCell(7) != null ? row.getCell(7).toString() : "");
-            
+
                 //String numero = row.getCell(8).toString();
                 DataFormatter dataFormatter = new DataFormatter();
-                usuario.setTelefono(row.getCell(8) != null ?  dataFormatter.formatCellValue( row.getCell(8)) : "");
+                usuario.setTelefono(row.getCell(8) != null ? dataFormatter.formatCellValue(row.getCell(8)) : "");
                 usuario.setCelular(row.getCell(9) != null ? dataFormatter.formatCellValue(row.getCell(9)) : "");
                 usuario.setCurp(row.getCell(10) != null ? row.getCell(10).toString() : "");
-                
+
                 usuario.Rol = new Rol();
                 usuario.Rol.setIdRol(row.getCell(11) != null ? (int) row.getCell(11).getNumericCellValue() : 0);
-                
+
                 usuario.Direcciones = new ArrayList<>();
                 Direccion direccion = new Direccion();
 
                 direccion.setCalle(row.getCell(12) != null ? row.getCell(12).toString() : "");
                 direccion.setNumeroInterior(row.getCell(13) != null ? dataFormatter.formatCellValue(row.getCell(13)) : "");
                 direccion.setNumeroExterior(row.getCell(14) != null ? dataFormatter.formatCellValue(row.getCell(14)) : "");
-                
+
                 direccion.Colonia = new Colonia();
                 direccion.Colonia.setIdColonia(row.getCell(15) != null ? (int) row.getCell(15).getNumericCellValue() : 0);
-                
+
                 usuarios.add(usuario);
                 usuario.Direcciones.add(direccion);
             }
-            
+
             return usuarios;
-            
+
         } catch (Exception ex) {
             return null;
         }
-        
+
     }
 
     private List<ErrorCM> ValidarDatos(List<Usuario> usuarios) {
@@ -649,7 +665,6 @@ public class UsuarioController {
                 errores.add(errorCM);
                 
             }*/
-            
             if (usuario.getSexo() == null || usuario.getSexo() == "") {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getSexo(), "Sexo es un campo obligatorio");
                 errores.add(errorCM);
@@ -677,7 +692,7 @@ public class UsuarioController {
             if (usuario.Rol.getIdRol() == 0) {
                 ErrorCM errorCM = new ErrorCM(linea, String.valueOf(usuario.getIdRol()), "Id Rol es un campo obligatorio");
                 errores.add(errorCM);
-                
+
             }
 
             if (usuario.Direcciones.get(0).getCalle() == null || usuario.Direcciones.get(0).getCalle() == "") {
@@ -685,25 +700,25 @@ public class UsuarioController {
                 errores.add(errorCM);
 
             }
-            
+
             if (usuario.Direcciones.get(0).getNumeroInterior() == null || usuario.Direcciones.get(0).getNumeroInterior() == "") {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.Direcciones.get(0).getCalle(), "Numero interior es un campo obligatorio");
                 errores.add(errorCM);
 
             }
-            
+
             if (usuario.Direcciones.get(0).getNumeroExterior() == null || usuario.Direcciones.get(0).getNumeroExterior() == "") {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.Direcciones.get(0).getCalle(), "Numero exterior es un campo obligatorio");
                 errores.add(errorCM);
 
             }
-            
+
             if (usuario.Direcciones.get(0).Colonia.getIdColonia() == 0) {
                 ErrorCM errorCM = new ErrorCM(linea, String.valueOf(usuario.Direcciones.get(0).Colonia.getIdColonia()), "Id Colonia es un campo obligatorio");
                 errores.add(errorCM);
-                
+
             }
-            
+
             //Expresiones Regex
             String SoloLetras = "^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\\s]*$"; // Nombre, ApellidoPaterno, ApellidoMaterno
             String SoloNumeros = "^[0-9]*$";
@@ -711,7 +726,7 @@ public class UsuarioController {
             String ValidarUserName = "^[^_|0-9|\\s]+[a-zA-Z0-9]+$"; //UserName
             String ValidarEmail = "^[a-zA-Z-0-9]+[^-|\\s]+@[a-zA-Z]+\\.[a-z]+"; //Email
             String ValidarCalle = "^[^@$!%*?&]+$"; //Calle
-            
+
             if (usuario.getUserName().matches(ValidarUserName)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getUserName(), "Username inválido");
@@ -722,37 +737,37 @@ public class UsuarioController {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getNombre(), "No se permiten números");
                 errores.add(errorCM);
             }
-            if (usuario.getApellidoPaterno().matches(SoloLetras)) {   
+            if (usuario.getApellidoPaterno().matches(SoloLetras)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getApellidoPaterno(), "No se permiten números");
                 errores.add(errorCM);
             }
-            if (usuario.getApellidoMaterno().matches(SoloLetras)) {   
+            if (usuario.getApellidoMaterno().matches(SoloLetras)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getApellidoMaterno(), "No se permiten números");
                 errores.add(errorCM);
             }
-            if (usuario.getEmail().matches(ValidarEmail)) {   
+            if (usuario.getEmail().matches(ValidarEmail)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getEmail(), "Formato de correo inválido");
                 errores.add(errorCM);
             }
-            if (usuario.getSexo().matches(SoloLetras)) {   
+            if (usuario.getSexo().matches(SoloLetras)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getSexo(), "Solo se permiten letras");
                 errores.add(errorCM);
             }
-            if (usuario.getTelefono().matches(SoloNumeros)) {   
+            if (usuario.getTelefono().matches(SoloNumeros)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getTelefono(), "Solo se permiten numeros");
                 errores.add(errorCM);
             }
-            if (usuario.getCelular().matches(SoloNumeros)) {   
+            if (usuario.getCelular().matches(SoloNumeros)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getCelular(), "Solo se permiten numeros");
                 errores.add(errorCM);
             }
-            if (usuario.getCurp().matches(SoloLetrasNumeros)) {   
+            if (usuario.getCurp().matches(SoloLetrasNumeros)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.getCurp(), "Formato de CURP inválido");
                 errores.add(errorCM);
@@ -762,17 +777,17 @@ public class UsuarioController {
                 ErrorCM errorCM = new ErrorCM(linea, String.valueOf(usuario.Rol.getIdRol()), "Solo los numeros estan permitidos");
                 errores.add(errorCM);
             }*/
-            if (usuario.Direcciones.get(0).getCalle().matches(ValidarCalle)) {   
+            if (usuario.Direcciones.get(0).getCalle().matches(ValidarCalle)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.Direcciones.get(0).getCalle(), "No se mermiten caracteres especiales");
                 errores.add(errorCM);
             }
-            if (usuario.Direcciones.get(0).getNumeroInterior().matches(SoloNumeros)) {   
+            if (usuario.Direcciones.get(0).getNumeroInterior().matches(SoloNumeros)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.Direcciones.get(0).getNumeroInterior(), "Solo los numeros están permitidos");
                 errores.add(errorCM);
             }
-            if (usuario.Direcciones.get(0).getNumeroExterior().matches(SoloNumeros)) {   
+            if (usuario.Direcciones.get(0).getNumeroExterior().matches(SoloNumeros)) {
             } else {
                 ErrorCM errorCM = new ErrorCM(linea, usuario.Direcciones.get(0).getNumeroExterior(), "Solo los numeros están permitidos");
                 errores.add(errorCM);

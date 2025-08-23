@@ -244,9 +244,9 @@
 
                             <!-- Rol -->
                             <div class="form-group col-12">
-                                <label for="usr">Rol:</label>
-                                <select class="form-control" id="sel1" th:field="*{Rol.IdRol}">
-                                    <option value="0" selected>Selecciona Rol</option>
+                                <label for="usr">Rol:</label>                   <!-- Rol.IdRol-->
+                                <select class="form-control" id="sel1" th:field="*{IdRol}">
+                                    <option value="0">Selecciona Rol</option>
                                     <option th:each="rol : ${roles}" th:text="${rol.Nombre}" th:value="${rol.IdRol}">One</option>
                                 </select>
                             </div>
@@ -399,7 +399,7 @@
                                 <label for="usr">Estado:</label>
                                 <select class="form-control" id="selectEstado" th:field="*{Direcciones[0].Colonia.Municipio.Estado.IdEstado}">
                                     <option value=0>Selecciona Estado</option>
-                                    <option  th:value="*{Direcciones[0].Colonia.Municipio.Estado.IdEstado}" th:text="*{Direcciones[0].Colonia.Municipio.Estado.Nombre}">One</option>
+                                    <option th:each="estado : ${estados}" th:text="${estado.Nombre}" th:value="${estado.IdEstado}">One</option>
                                 </select>
                             </div>
 

@@ -20,12 +20,49 @@
                 font-size: 50px;
                 font-style: normal;
             }
-            
+
             .subtitle {
                 text-transform: uppercase;
                 font-family: "Bebas Neue", sans-serif;
                 font-size: 30px;
                 font-style: normal;
+            }
+            
+            .form-busqueda {
+                border: 1px solid #C7C7C7;
+                padding: 10px;
+                border-radius: 10px;
+                padding: 20px;
+            }
+            
+            .lbl-busqueda {
+                width: 90px;
+                transform: translate(30%, 50%); 
+                background-color: white;
+                text-transform: uppercase;
+                font-family: "Bebas Neue", sans-serif;
+                font-size: 20px;
+                font-style: normal;
+                text-align: center
+                
+            }
+            
+            input {
+                font-family: "Playwrite AU NSW", cursive;
+                font-optical-sizing: auto;
+                font-style: normal;
+            }
+
+            input:hover {
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.94);
+            }
+            
+            .btn-busqueda-div {
+                margin-top: -20px;
+            }
+            
+            .btn-search {
+                border-radius: 50%;
             }
 
             .btn-add-user {
@@ -75,16 +112,56 @@
             <br>
             <center><h1 class="title">Usuarios</h1></center>
             <br>
-            
-            <h2 class="mb-4 subtitle">Buscar en Tabla</h2>
+
+            <!--h2 class="mb-4 subtitle">Buscar en Tabla</h2>-->
             <!-- Campo de búsqueda -->
-            <input
+            <!--<input
                 type="text"
                 id="searchInput"
                 class="form-control mb-3"
                 placeholder="¿Buscas a alguien?..."
-                />
-           
+                />-->
+            <div class="lbl-busqueda">
+                Busqueda
+            </div>
+            
+            <form class="form-busqueda" method="post" th:action="@{/usuario}" th:object="${usuarioBusqueda}">
+                <div class="row">
+                    <div class="form-group col-3">
+                        
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa nombre" th:field="*{Nombre}">
+                        <center><div id="emailHelp" class="form-text">Nombre</div></center>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <!--<label for="usr">Apellido paterno:</label>-->
+                        <input type="text" class="form-control" id="apellidoPaterno" name="apellidoPaterno" placeholder="Ingresa apellido paterno" th:field="*{ApellidoPaterno}">
+                        <center><div id="emailHelp" class="form-text">Apellido paterno</div></center>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <!--<label for="usr">Apellido materno: </label>-->
+                        <input type="text" class="form-control" id="apellidoMaterno" name="apellidoMaterno" placeholder="Ingresa apellido materno" th:field="*{ApellidoMaterno}">
+                        <center><div id="emailHelp" class="form-text">Apellido materno</div></center>
+                    </div>
+
+                    
+                    <div class="form-group col-2">
+                        <label for="usr">Rol:</label>                   
+                        <select class="form-control" id="rol" name="rol">
+                            <option value="0">Selecciona Rol</option>
+                            <option th:each="rol : ${roles}" th:text="${rol.Nombre}" th:value="${rol.IdRol}">One</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-1 btn-busqueda-div" >
+                        
+                        <button type="submit" class="btn btn-success btn-lg active btn-search" style="margin-top: 18px"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </form>
+
+            <br>
+
             <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                     <thead class="table-dark">
@@ -143,36 +220,36 @@
                 </table>
             </div>
         </div>
-        
+
         <script>
-    // Referencia al campo de búsqueda y al cuerpo de la tabla
-    const searchInput = document.getElementById('searchInput');
-    const tableBody = document.getElementById('tableBody');
+            // Referencia al campo de búsqueda y al cuerpo de la tabla
+            const searchInput = document.getElementById('searchInput');
+            const tableBody = document.getElementById('tableBody');
 
-    // Evento para filtrar la tabla
-    searchInput.addEventListener('keyup', function () {
-      const filter = searchInput.value.toLowerCase(); // Texto ingresado en minúsculas
-      const rows = tableBody.getElementsByTagName('tr'); // Todas las filas de la tabla
+            // Evento para filtrar la tabla
+            searchInput.addEventListener('keyup', function () {
+            const filter = searchInput.value.toLowerCase(); // Texto ingresado en minúsculas
+            const rows = tableBody.getElementsByTagName('tr'); // Todas las filas de la tabla
 
-      for (let row of rows) {
-        const cells = row.getElementsByTagName('td'); // Todas las celdas de la fila
-        let match = false;
+            for (let row of rows) {
+            const cells = row.getElementsByTagName('td'); // Todas las celdas de la fila
+            let match = false;
 
-        // Verificar si alguna celda contiene el texto buscado
-        for (let cell of cells) {
-          if (cell.textContent.toLowerCase().includes(filter)) {
+            // Verificar si alguna celda contiene el texto buscado
+            for (let cell of cells) {
+            if (cell.textContent.toLowerCase().includes(filter)) {
             match = true;
             break;
-          }
-        }
+            }
+            }
 
-        // Mostrar u ocultar la fila según si coincide
-        row.style.display = match ? '' : 'none';
-      }
-    });
-  </script>
-        
-        
-        
+            // Mostrar u ocultar la fila según si coincide
+            row.style.display = match ? '' : 'none';
+            }
+            });
+        </script>
+
+
+
     </body>
 </html>

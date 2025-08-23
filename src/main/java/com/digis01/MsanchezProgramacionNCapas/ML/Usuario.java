@@ -84,6 +84,14 @@ public class Usuario {
         this.IdRol = IdRol;
     }
 
+    public Usuario(String Nombre, String ApellidoPaterno, String ApellidoMaterno) {
+        this.Nombre = Nombre;
+        this.ApellidoPaterno = ApellidoPaterno;
+        this.ApellidoMaterno = ApellidoMaterno;
+    }
+    
+    
+
     // Getter y Setter de idUsuario
     public void setIdUsuario(int idUsuario) {
         this.IdUsuario = idUsuario;

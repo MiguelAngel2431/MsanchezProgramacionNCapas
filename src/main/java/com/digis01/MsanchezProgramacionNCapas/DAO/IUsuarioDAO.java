@@ -8,7 +8,7 @@ import com.digis01.MsanchezProgramacionNCapas.ML.Usuario;
 
 //Firma de metodos
 public interface IUsuarioDAO {
-    Result GetAll(); // metodo abstracto, es decir, no lleva implementación
+    Result GetAll(Usuario usuario); // metodo abstracto, es decir, no lleva implementación
     Result GetById(int idUsuario); //Aqui es donde la direccion la pues en -1
     Result GetId(int idUsuario); //no lo ocupo (borrar despues)
     Result GetDetail(int idUsuario); //metodo para obtener el detall 
