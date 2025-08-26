@@ -73,7 +73,7 @@ public class Usuario {
     
     /*@OneToMany
     @JoinColumn (name = "iddireccion")*/
-    //@OneToMany(mappedBy = "usuarios", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuarios", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<Direccion> Direcciones;
     
     @Lob
