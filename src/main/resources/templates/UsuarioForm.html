@@ -107,6 +107,12 @@
             .error-msg-lenght {
                 color: red;
             }
+            
+            @media (max-width: 768px) {
+                .container {
+                    padding: 10px 30px;
+                }
+            }
         </style>
 
     </head>
@@ -181,7 +187,7 @@
                             </div>
 
                             <!-- Apellido paterno -->
-                            <div class="form-group col-6">
+                            <div class="form-group col-md-6">
                                 <label for="usr">Apellido paterno:</label>
                                 <input type="text" class="form-control" id="inputApellidoPaterno" placeholder="Ingresa apellido paterno" th:field="*{ApellidoPaterno}" onkeydown="SoloLetras(event, this)">
                                 <!--<span class="error-msg"></span>-->
@@ -193,7 +199,7 @@
                             </div>
 
                             <!-- Apellido materno -->
-                            <div class="form-group col-6">
+                            <div class="form-group col-md-6">
                                 <label for="usr">Apellido materno:</label>
                                 <input type="text" class="form-control" id="inputApellidoMaterno" placeholder="Ingresa apellido materno" th:field="*{ApellidoMaterno}" onkeydown="SoloLetras(event, this)">
                                 <!--<span class="error-msg"></span>-->
@@ -205,7 +211,7 @@
                             </div>
 
                             <!-- CURP -->
-                            <div class="form-group col-6">
+                            <div class="form-group col-md-6">
                                 <label for="usr">CURP:</label>
                                 <input type="text" class="form-control" id="inputCurp" placeholder="Ingresa CURP" th:field="*{Curp}" onkeydown="SoloLetrasNumeros(event, this)">
                                 <!--<span class="error-msg"></span>-->
@@ -217,7 +223,7 @@
                             </div>
 
                             <!-- Fecha de nacimiento -->
-                            <div class="form-group col-6">
+                            <div class="form-group col-md-6">
                                 <label for="usr">Fecha de nacimiento:</label>
                                 <input type="date" class="form-control" id="inputFechaNacimiento" placeholder="yyyy-mm-dd" aria-label="Last name" th:field="*{FechaNacimiento}" >
                             </div>
@@ -227,7 +233,7 @@
                                 <div class="form-group col-12">
                                     <label for="usr">Sexo:</label>
                                     <div class="form-check-inline">
-                                        <span th:text="*{Sexo == 'M ' ? 'igual' : 'diferente'}"></span>
+                                        <!--<span th:text="*{Sexo == 'M ' ? 'igual' : 'diferente'}"></span>-->
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="M " th:field="*{Sexo}" th:checked="${Usuario.Sexo == 'M '}" >
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             Masculino
@@ -245,7 +251,7 @@
                             <!-- Rol -->
                             <div class="form-group col-12">
                                 <label for="usr">Rol:</label>                   <!-- Rol.IdRol-->
-                                <select class="form-control" id="sel1" th:field="*{IdRol}">
+                                <select class="form-control" id="sel1" th:field="*{Rol.IdRol}">
                                     <option value="0">Selecciona Rol</option>
                                     <option th:each="rol : ${roles}" th:text="${rol.Nombre}" th:value="${rol.IdRol}">One</option>
                                 </select>
@@ -293,7 +299,7 @@
                             </div>
 
                             <!-- Contraseña -->
-                            <div class="form-group col-6" th:if="*{(IdUsuario == 0 && Direcciones[0].IdDireccion == 0)}">
+                            <div class="form-group col-md-6" th:if="*{(IdUsuario == 0 && Direcciones[0].IdDireccion == 0)}">
                                 <label for="usr">Contraseña:</label>
                                 <input type="password" class="form-control" id="inputPassword" placeholder="Ingresa contraseña" th:field="*{Password}" onkeyup="SecurePassword(event, this)">
                                 <span class="error-msg-lenght msg-error"></span>
@@ -305,7 +311,7 @@
                             </div>
 
                             <!-- Confirmar Contraseña -->
-                            <div class="form-group col-6" th:if="*{(IdUsuario == 0 && Direcciones[0].IdDireccion == 0)}">
+                            <div class="form-group col-md-6" th:if="*{(IdUsuario == 0 && Direcciones[0].IdDireccion == 0)}">
                                 <label for="usr">Confirmar contraseña:</label>
                                 <input type="password" class="form-control" id="inputConfirmPassword" placeholder="Ingresa contraseña" onblur="VerificarPasswords(event, this)">
                                 <span class="error-msg"></span>
@@ -386,7 +392,7 @@
                             </div>
 
                             <!-- Pais -->
-                            <div class="form-group col-3">
+                            <div class="form-group col-md-3">
                                 <label for="usr">Pais:</label>
                                 <select class="form-control" id="selectPais" th:field="*{Direcciones[0].Colonia.Municipio.Estado.Pais.IdPais}">
                                     <option value=0>Selecciona pais</option>
@@ -395,7 +401,7 @@
                             </div>
 
                             <!-- Estado -->
-                            <div class="form-group col-3">
+                            <div class="form-group col-md-3">
                                 <label for="usr">Estado:</label>
                                 <select class="form-control" id="selectEstado" th:field="*{Direcciones[0].Colonia.Municipio.Estado.IdEstado}">
                                     <option value=0>Selecciona Estado</option>
@@ -404,20 +410,20 @@
                             </div>
 
                             <!-- Municipio -->
-                            <div class="form-group col-3">
+                            <div class="form-group col-md-3">
                                 <label for="usr">Municipio:</label>
                                 <select class="form-control" id="selectMunicipio" th:field="*{Direcciones[0].Colonia.Municipio.IdMunicipio}">
                                     <option value=0>Selecciona Municipio</option>
-                                   <option  th:value="*{Direcciones[0].Colonia.Municipio.IdMunicipio}" th:text="*{Direcciones[0].Colonia.Municipio.Nombre}">One</option>
+                                   <option th:each="municipio : ${municipios}" th:text="${municipio.Nombre}" th:value="${municipio.IdMunicipio}">One</option>
                                 </select>
                             </div>
 
                             <!-- Colonia -->
-                            <div class="form-group col-3">
+                            <div class="form-group col-md-3">
                                 <label for="usr">Colonia:</label>
                                 <select class="form-control" id="selectColonia" th:field="*{Direcciones[0].Colonia.IdColonia}">
                                     <option value=0 selected>Selecciona Colonia</option>
-                                    <option th:each="${colonia : ${colonias}}"  th:value="*{colonia.IdColonia}" th:text="*{colonia.Nombre}" selected>One</option>
+                                    <option th:each="colonia: ${colonias}" th:text="${colonia.Nombre}" th:value="${colonia.IdColonia}">One</option>
 
                                 </select>
                             </div>

@@ -1,77 +1,96 @@
-package com.digis01.MsanchezProgramacionNCapas.ML;
 
+package com.digis01.MsanchezProgramacionNCapas.JPA;
+
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Entity
+@Table(name = "usuarios")
 public class Usuario {
     
-    //@NotNull()
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idusuario")
     private int IdUsuario;
     
-    @Size(min = 4, max = 20, message = "Texto de entre 4 y 20 letras")
-    @NotEmpty(message = "Informacion requerida")
-    @Pattern(regexp = "^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\\s]*$", message = "No se permiten numeros")
+    @Column(name = "nombre")
     private String Nombre;
     
-    @Size(min = 4, max = 20, message = "Texto de entre 4 y 20 letras")
-    @NotEmpty(message = "Informacion requerida")
+    @Column(name = "apellidopaterno")
     private String ApellidoPaterno;
     
-    @Size(min = 4, max = 20, message = "Texto de entre 4 y 20 letras")
-    @NotEmpty(message = "Informacion requerida")
+    @Column(name = "apellidomaterno")
     private String ApellidoMaterno;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "fechanacimiento")
     private Date FechaNacimiento;
-    private int NumeroHermanos;
-    private double PromedioEscolar;
-
-    //Nuevos parametros
-    @NotEmpty(message = "Informacion requerida")
-    @Pattern(regexp = "^[^_|0-9|\\s]+[a-zA-Z0-9]+$", message = "Username invalido")
+ 
+    @Column(name = "username")
     private String UserName;
     
-//    @Pattern(regexp = "^[a-zA-Z-0-9]+[^-|\\s]+@[a-zA-Z]+\\.[a-z]+", message = "Formato de correo invalido")
-    @NotEmpty(message = "Informacion requerida")
+    @Column(name = "email")
     private String Email;
+    
+    @Column(name = "password")
     private String Password;
+    
+    @Column(name = "sexo")
     private String Sexo;
     
-    @Pattern(regexp = "^[0-9]*$", message = "Solo se permiten numeros")
-    @NotEmpty(message = "Informacion requerida")
+    @Column(name = "telefono")
     private String Telefono;
     
-    @Pattern(regexp = "^[0-9]*$", message = "Solo se permiten numeros")
-    @NotEmpty(message = "Informacion requerida")
+    @Column(name = "celular")
     private String Celular;
     
-    @NotEmpty(message = "Informacion requerida")
+    @Column(name = "curp")
     private String Curp;
-    public int IdRol;
+    
+    /*@Column(name = "idrol")
+    public int IdRol;*/
 
+    @ManyToOne
+    @JoinColumn(name = "idrol")
     public Rol Rol; //Propiedad de navegacion (no ocupa setter ni getter, porque es public)
     
+    /*@OneToMany
+    @JoinColumn (name = "iddireccion")*/
+    @OneToMany(mappedBy = "usuarios", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<Direccion> Direcciones;
     
+    @Lob
+    @Column(name = "imagen")
     private String Imagen;
 
     //Constructores
     public Usuario() {
     }
 
-    public Usuario(int idUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, int numeroHermanos, double promedioEscolar, String userName, String email, String password, String sexo, String telefono, String celular, String curp, int idRol) {
+    public Usuario(int idUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, String userName, String email, String password, String sexo, String telefono, String celular, String curp) {
         this.IdUsuario = idUsuario;
         this.Nombre = nombre;
         this.ApellidoPaterno = apellidoPaterno;
         this.ApellidoMaterno = apellidoMaterno;
         this.FechaNacimiento = fechaNacimiento;
-        this.NumeroHermanos = numeroHermanos;
-        this.PromedioEscolar = promedioEscolar;
+        
 
         //Nuevos parametros
         this.UserName = userName;
@@ -81,14 +100,15 @@ public class Usuario {
         this.Telefono = telefono;
         this.Celular = celular;
         this.Curp = curp;
-        this.IdRol = IdRol;
+        /*this.IdRol = IdRol;*/
+        
     }
 
-    public Usuario(String Nombre, String ApellidoPaterno, String ApellidoMaterno, int IdRol) {
+    public Usuario(String Nombre, String ApellidoPaterno, String ApellidoMaterno) {
         this.Nombre = Nombre;
         this.ApellidoPaterno = ApellidoPaterno;
         this.ApellidoMaterno = ApellidoMaterno;
-        this.IdRol = IdRol;
+        //this.IdRol = IdRol;
     }
     
     
@@ -136,24 +156,6 @@ public class Usuario {
 
     public Date getFechaNacimiento() {
         return this.FechaNacimiento;
-    }
-
-    //Getter y Setter de numeroHermanos
-    public void setNumeroHermanos(int numeroHermanos) {
-        this.NumeroHermanos = numeroHermanos;
-    }
-
-    public int getNumeroHermanos() {
-        return this.NumeroHermanos;
-    }
-
-    //Getter y Setter de promedioEscolar
-    public void setPromedioEscolar(double promedioEscolar) {
-        this.PromedioEscolar = promedioEscolar;
-    }
-
-    public double getPromedioEscolar() {
-        return this.PromedioEscolar;
     }
 
     //Getter y Setter de userName
@@ -218,7 +220,7 @@ public class Usuario {
     public String getCurp() {
         return this.Curp;
     }
-
+    /*
     //Getter y Stter de idRol
     public void setIdRol(int idRol) {
         this.IdRol = idRol;
@@ -227,7 +229,7 @@ public class Usuario {
     public int getIdRol() {
         return this.IdRol;
     }
-
+    */
     //Getter y Setter de Rol
     public void setRol(Rol Rol) {
         this.Rol = Rol;
@@ -254,21 +256,5 @@ public class Usuario {
     public String getImagen() {
         return this.Imagen;
     }
-    
-    
-
-    /*@Override
-    public String toString() {
-        return "Usuario{" +
-                "IdUsuario='" + IdUsuario + '\'' +
-                ", Nombre='" + Nombre + '\'' +
-                ", ApellidoPaterno='" + ApellidoPaterno + '\'' +
-                ", ApellidoMaterno='" + ApellidoMaterno + '\'' +
-                ", FechaNacimiento='" + FechaNacimiento + '\'' +
-                ", NumeroHermanos='" + NumeroHermanos + '\'' +
-                ", PromedioEscolar='" + PromedioEscolar + '\'' +
-                '}';
-    }*/
-
     
 }

@@ -27,16 +27,17 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
 
         try {
 
-            jdbcTemplate.execute("{CALL UsuarioDireccionGetAll(?, ?, ?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
+            jdbcTemplate.execute("{CALL UsuarioDireccionGetAll(?, ?, ?, ?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> {
                 
                 callableStatement.setString(1, usuario.getNombre());
                 callableStatement.setString(2, usuario.getApellidoPaterno());
                 callableStatement.setString(3, usuario.getApellidoMaterno());
-                callableStatement.registerOutParameter(4, java.sql.Types.REF_CURSOR);
+                callableStatement.setInt(4, usuario.getIdRol());
+                callableStatement.registerOutParameter(5, java.sql.Types.REF_CURSOR);
 
                 callableStatement.execute();
 
-                ResultSet resultSet = (ResultSet) callableStatement.getObject(4);
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(5);
 
                 result.objects = new ArrayList<>();
 
@@ -349,7 +350,10 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                     usuario.setTelefono(resultSet.getString("Telefono"));
                     usuario.setCelular(resultSet.getString("Celular"));
                     usuario.setCurp(resultSet.getString("Curp"));
-                    usuario.setIdRol(resultSet.getInt("IdRol"));
+                    
+                    usuario.Rol = new Rol();
+                    
+                    usuario.Rol.setIdRol(resultSet.getInt("IdRol"));
                     //usuario.setImagen(resultSet.getString("Imagen"));
 
                     usuario.Direcciones = new ArrayList<>();

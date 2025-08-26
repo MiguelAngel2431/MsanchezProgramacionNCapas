@@ -6,6 +6,7 @@ import com.digis01.MsanchezProgramacionNCapas.DAO.MunicipioDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.PaisDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.RolDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.UsuarioDAOImplementation;
+import com.digis01.MsanchezProgramacionNCapas.DAO.UsuarioJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.ML.Colonia;
 import com.digis01.MsanchezProgramacionNCapas.ML.Direccion;
 import com.digis01.MsanchezProgramacionNCapas.ML.ErrorCM;
@@ -54,6 +55,9 @@ public class UsuarioController {
 
     @Autowired //Inyeccion de dependencias
     private UsuarioDAOImplementation usuarioDAOImplementation;
+    
+    @Autowired
+    private UsuarioJPADAOImplementation usuarioJPADAOImplementation;
 
     @Autowired //Inyeccion de dependencias
     private RolDAOImplementation rolDAOImplementation;
@@ -74,8 +78,11 @@ public class UsuarioController {
     //Metodo para retornar todos los usarios a la vista
     @GetMapping
     public String Index(Model model) {
-        Result result = usuarioDAOImplementation.GetAll(new Usuario("", "", ""));
-
+        //Result result = usuarioDAOImplementation.GetAll(new Usuario("", "", "", 0));
+        Result result = usuarioJPADAOImplementation.GetAll();
+        
+        usuarioJPADAOImplementation.GetAll();
+        
         model.addAttribute("usuarioBusqueda", new Usuario());
 
         if (result.correct) {
@@ -98,6 +105,7 @@ public class UsuarioController {
 
         if (result.correct) {
             model.addAttribute("usuarios", result.objects);
+            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
         } else {
             model.addAttribute("usuarios", null);
         }
@@ -223,12 +231,16 @@ public class UsuarioController {
                 usuario.setIdUsuario(IdUsuario);
                 usuario.setDirecciones(new ArrayList<>());
                 usuario.getDirecciones().add((Direccion) result.object);
+                
+                //Result resultEstados = estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais());
 
                 model.addAttribute("Usuario", usuario);
 
                 model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
-                model.addAttribute("estados", estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais()));
-//                estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais())
+                model.addAttribute("estados", estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais()).objects);
+                model.addAttribute("municipios", municipioDAOImplementation.MunicipioByIdEstado(usuario.Direcciones.get(0).Colonia.Municipio.Estado.getIdEstado()).objects);
+                model.addAttribute("colonias", coloniaDAOImplementation.ColoniaByIdMunicipio(usuario.Direcciones.get(0).Colonia.Municipio.getIdMunicipio()).objects);
+
             } else {
                 model.addAttribute("Usuario", null);
             }
