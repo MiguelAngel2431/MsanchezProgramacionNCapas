@@ -31,11 +31,11 @@ public class Municipio {
     //Constructores
     public Municipio() {}
     
-    public Municipio(int idMunicipio, String nombre) {
+    /*public Municipio(int idMunicipio, String nombre) {
         this.IdMunicipio = idMunicipio;
         this.Nombre = nombre;
         //this.idEstado = idEstado;
-    }
+    }*/
 
     public Estado getEstado() {
         return Estado;

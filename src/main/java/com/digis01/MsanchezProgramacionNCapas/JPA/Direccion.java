@@ -1,9 +1,10 @@
 
 package com.digis01.MsanchezProgramacionNCapas.JPA;
 
-import com.digis01.MsanchezProgramacionNCapas.ML.Colonia;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,37 +33,37 @@ public class Direccion {
     @Column(name = "numeroexterior")
     private String NumeroExterior;
     
-    @ManyToOne
-    @JoinColumn(name = "idusuario")
-    public int IdUsuario;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idusuario", nullable = false)
+    public Usuario Usuario;
     
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "idcolonia")
     public Colonia Colonia; //Propiedad de navegacion
     
     //Constructores
     public Direccion() {}
     
-    public Direccion(int idDireccion, String calle, String numeroInterior, String numeroExterior, int idUsuario) {
+    /*public Direccion(int idDireccion, String calle, String numeroInterior, String numeroExterior, int idUsuario) {
         this.IdDireccion = idDireccion;
         this.Calle = calle;
         this.NumeroInterior = numeroInterior;
         this.NumeroExterior = numeroExterior;
         //this.IdColonia = idColonia;
         this.IdUsuario = idUsuario;
-    }
+    }*/
 
     public Direccion(int IdDireccion) {
         this.IdDireccion = IdDireccion;
     }
 
-    public int getIdUsuario() {
+    /*public int getIdUsuario() {
         return IdUsuario;
     }
 
     public void setIdUsuario(int IdUsuario) {
         this.IdUsuario = IdUsuario;
-    }
+    }*/
     
     
     

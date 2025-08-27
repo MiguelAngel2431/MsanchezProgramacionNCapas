@@ -73,7 +73,7 @@
     <body layout:fragment="body">
         <div class="container">
             <div class="row justify-content-center container-info">
-                <div class="personal-info col-lg-4 col-md-4 col-sm-4" style="height: 530px">
+                <div class="personal-info col-lg-4 col-md-5 col-sm-12" style="height: 530px">
 
                     <!-- Editar usuario -->
                     <a class="btn btn-warning btn-add-user" th:href="|@{/usuario/formEditable?IdUsuario=}${usuario.IdUsuario}|">Editar <i class="bi bi-pencil-square"></i></a>
@@ -96,7 +96,7 @@
 
                 </div>
 
-                <div class="directions col-lg-8 col-md-8 col-sm-8" style="height: 530px">
+                <div class="directions col-lg-8 col-md-7 col-sm-12" style="height: 530px">
 
                     <!-- Agregar direccion -->
                     <a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success btn-util">Agregar direccion<i class="bi bi-pencil-square"></i></a>

@@ -12,16 +12,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedStoredProcedureQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
+//@NamedStoredProcedureQuery(name = "Usuarios.addUserDrections", procedureName = "UsuarioDireccionAdd", resultClasses = Usuario.class)
 @Table(name = "usuarios")
 public class Usuario {
     
@@ -39,7 +44,8 @@ public class Usuario {
     @Column(name = "apellidomaterno")
     private String ApellidoMaterno;
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    //@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     @Column(name = "fechanacimiento")
     private Date FechaNacimiento;
  
@@ -73,8 +79,8 @@ public class Usuario {
     
     /*@OneToMany
     @JoinColumn (name = "iddireccion")*/
-    //@OneToMany(mappedBy = "usuarios", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    public List<Direccion> Direcciones;
+    @OneToMany(mappedBy = "Usuario", cascade = CascadeType.ALL, orphanRemoval =  true)
+    public List<Direccion> Direcciones = new ArrayList<>();
     
     @Lob
     @Column(name = "imagen")
@@ -84,7 +90,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(int idUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, String userName, String email, String password, String sexo, String telefono, String celular, String curp) {
+    /*public Usuario(int idUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, String userName, String email, String password, String sexo, String telefono, String celular, String curp) {
         this.IdUsuario = idUsuario;
         this.Nombre = nombre;
         this.ApellidoPaterno = apellidoPaterno;
@@ -100,9 +106,9 @@ public class Usuario {
         this.Telefono = telefono;
         this.Celular = celular;
         this.Curp = curp;
-        /*this.IdRol = IdRol;*/
+        this.IdRol = IdRol;
         
-    }
+    }*/
 
     public Usuario(String Nombre, String ApellidoPaterno, String ApellidoMaterno) {
         this.Nombre = Nombre;

@@ -29,11 +29,11 @@ public class Estado {
     //Constructores
     public Estado() {}
     
-    public Estado(int idEstado, String nombre) {
+    /*public Estado(int idEstado, String nombre) {
         this.IdEstado = idEstado;
         this.Nombre = nombre;
         //this.IdPais = IdPais;
-    }
+    }*/
 
     public Pais getPais() {
         return Pais;

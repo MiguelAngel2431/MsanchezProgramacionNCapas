@@ -4,6 +4,7 @@
  */
 package com.digis01.MsanchezProgramacionNCapas.DAO;
 
+import com.digis01.MsanchezProgramacionNCapas.ML.Usuario;
 import com.digis01.MsanchezProgramacionNCapas.ML.Result;
 
 /**
@@ -12,4 +13,5 @@ import com.digis01.MsanchezProgramacionNCapas.ML.Result;
  */
 public interface IUsuarioJPADAO {
     Result GetAll();
+    Result Add(Usuario usuario);
 }

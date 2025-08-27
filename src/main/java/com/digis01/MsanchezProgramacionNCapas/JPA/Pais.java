@@ -21,10 +21,10 @@ public class Pais {
     //Constructores
     public Pais() {}
     
-    public Pais(int idPais, String nombre) {
+    /*public Pais(int idPais, String nombre) {
         this.IdPais = idPais;
         this.Nombre = nombre;
-    }
+    }*/
     
     //Getter y Setter de idPais
     public void setIdPais(int idPais) {

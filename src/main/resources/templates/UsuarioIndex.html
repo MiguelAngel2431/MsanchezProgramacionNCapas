@@ -286,29 +286,30 @@
             <div class="lbl-busqueda">
                 Busqueda
             </div>
-
+            
+            <!-- Banner busqueda personalizada -->
             <form class="form-busqueda" method="post" th:action="@{/usuario}" th:object="${usuarioBusqueda}">
                 <div class="row">
-                    <div class="form-group col-3">
+                    <div class="form-group col-lg-3 col-md-2 col-3">
 
                         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa nombre" th:field="*{Nombre}">
                         <center><div id="emailHelp" class="form-text">Nombre</div></center>
                     </div>
 
-                    <div class="form-group col-3">
+                    <div class="form-group col-lg-3 col-md-3 col-3">
                         <!--<label for="usr">Apellido paterno:</label>-->
                         <input type="text" class="form-control" id="apellidoPaterno" name="apellidoPaterno" placeholder="Ingresa apellido paterno" th:field="*{ApellidoPaterno}">
                         <center><div id="emailHelp" class="form-text">Apellido paterno</div></center>
                     </div>
 
-                    <div class="form-group col-3">
+                    <div class="form-group col-lg-3 col-md-3 col-3">
                         <!--<label for="usr">Apellido materno: </label>-->
                         <input type="text" class="form-control" id="apellidoMaterno" name="apellidoMaterno" placeholder="Ingresa apellido materno" th:field="*{ApellidoMaterno}">
                         <center><div id="emailHelp" class="form-text">Apellido materno</div></center>
                     </div>
 
 
-                    <div class="form-group col-2">
+                    <div class="form-group col-lg-2 col-md-2 col-2">
                         <label for="usr">Rol:</label>                   
                         <select class="form-control" id="rol" name="rol" th:field="*{IdRol}">
                             <option value="0">Selecciona Rol</option>

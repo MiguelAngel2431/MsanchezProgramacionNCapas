@@ -33,12 +33,12 @@ public class Colonia {
     //Costructores
     public Colonia() {}
     
-    public Colonia (int idColonia, String nombre, String codigoPostal) {
+    /*public Colonia (int idColonia, String nombre, String codigoPostal) {
         this.IdColonia = idColonia;
         this.Nombre = nombre;
         this.CodigoPostal=  codigoPostal;
         //this.IdMunicipio = idMunicipio;
-    }
+    }*/
 
     public Municipio getMunicipio() {
         return Municipio;

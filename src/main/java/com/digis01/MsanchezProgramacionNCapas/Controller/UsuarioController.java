@@ -81,7 +81,7 @@ public class UsuarioController {
         //Result result = usuarioDAOImplementation.GetAll(new Usuario("", "", "", 0));
         Result result = usuarioJPADAOImplementation.GetAll();
         
-        usuarioJPADAOImplementation.GetAll();
+        //usuarioJPADAOImplementation.GetAll();
         
         model.addAttribute("usuarioBusqueda", new Usuario());
 
@@ -114,34 +114,7 @@ public class UsuarioController {
 
     }
 
-    //Metodo para retornar los datos de un usuario especifico a la vista
-    /*@GetMapping("usuarioDetail/{idUsuario}")
-    public String UsuarioDetail(@PathVariable int idUsuario, Model model) {
-
-        Result result = usuarioDAOImplementation.GetDetail(idUsuario);
-
-        if (result.correct) {
-            model.addAttribute("usuario", result.object);
-        } else {
-            model.addAttribute("usuario", null);
-        }
-
-        return "UsuarioDetail"; //Retornamos hacia la vista UsuarioDetail.html
-    }*/
-
- /*@GetMapping("add")
-    public String Add(Model model) {
-
-        //Result result = rolDAOImplementation.GetAll();
-        model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
-
-        model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
-
-        //Creamos un usario para que pueda escribir en el
-        model.addAttribute("Usuario", new Usuario());
-
-        return "UsuarioForm";
-    }*/
+  
     @GetMapping("/action/{IdUsuario}")
     public String Add(Model model, @PathVariable("IdUsuario") int idUsuario) {
 
@@ -293,8 +266,9 @@ public class UsuarioController {
                 }
 
                 //Autoinferencia
-                Result result = usuarioDAOImplementation.Add(usuario);
-
+                //Result result = usuarioDAOImplementation.Add(usuario);
+                Result result = usuarioJPADAOImplementation.Add(usuario);
+                
                 return "redirect:/usuario";
             }
         }
