@@ -4,7 +4,6 @@
  */
 package com.digis01.MsanchezProgramacionNCapas.DAO;
 
-import com.digis01.MsanchezProgramacionNCapas.ML.Usuario;
 import com.digis01.MsanchezProgramacionNCapas.ML.Result;
 
 /**
@@ -13,5 +12,13 @@ import com.digis01.MsanchezProgramacionNCapas.ML.Result;
  */
 public interface IUsuarioJPADAO {
     Result GetAll();
-    Result Add(Usuario usuario);
-}
+    Result GetById(int idUsuario);
+    Result Add(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuario);
+    Result EliminarUsuario(int IdUsuario);
+    Result EditarUsuario(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuario);
+    
+    Result AgregarDireccion(com.digis01.MsanchezProgramacionNCapas.ML.Direccion direccion);
+    Result EliminarDireccion(int IdDireccion);
+    Result EditarDireccion(com.digis01.MsanchezProgramacionNCapas.ML.Direccion direccion);
+    
+}   

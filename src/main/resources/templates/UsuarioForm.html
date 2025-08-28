@@ -299,7 +299,7 @@
                             </div>
 
                             <!-- Contraseña -->
-                            <div class="form-group col-md-6" th:if="*{(IdUsuario == 0 && Direcciones[0].IdDireccion == 0)}">
+                            <div class="form-group col-md-6">
                                 <label for="usr">Contraseña:</label>
                                 <input type="password" class="form-control" id="inputPassword" placeholder="Ingresa contraseña" th:field="*{Password}" onkeyup="SecurePassword(event, this)">
                                 <span class="error-msg-lenght msg-error"></span>

@@ -67,6 +67,40 @@
             .directions-title {
                 font-weight: bold;
             }
+
+            .div-btn-adddirecion-responsive {
+                visibility: hidden;
+                position: absolute;
+            }
+
+            .btn-add-direction {
+                visibility: visible;
+            }
+
+            @media (max-width: 768px) {
+                .div-btn-adddirecion-responsive {
+                    position: relative;
+                    visibility: visible;
+                    justify-content: end;
+                }
+
+                .btn-add-direction-responsive {
+                    border-radius: 50% 50% 0 0;
+                    background-color: black;
+                    border: solid 1px white;
+                }
+
+                .btn-add-direction-responsive:hover {
+                    background-color: white;
+                    border: 2px solid black;
+                    color: black;
+                }
+
+                .btn-add-direction {
+                    position: absolute;
+                    visibility: hidden;
+                }
+            }
         </style>
 
     </head>
@@ -99,9 +133,9 @@
                 <div class="directions col-lg-8 col-md-7 col-sm-12" style="height: 530px">
 
                     <!-- Agregar direccion -->
-                    <a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success btn-util">Agregar direccion<i class="bi bi-pencil-square"></i></a>
+                    <a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success btn-util btn-add-direction">Agregar direccion &nbsp; <i class="bi bi-house-add"></i></a>
                     <center><h1 class="directions-title">Direcciones</h1></center>
-                    
+
                     <h2 class="mb-4 subtitle">Buscar en Tabla</h2>
                     <!-- Campo de búsqueda -->
                     <input
@@ -110,6 +144,11 @@
                         class="form-control mb-3"
                         placeholder="¿Andas perdido?..."
                         />
+
+                    <!-- Boton agregar direccion responsive -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end div-btn-adddirecion-responsive">
+                        <a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success btn-util btn-add-direction-responsive"><i class="bi bi-house-add"></i></a>
+                    </div>
 
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered">
@@ -151,34 +190,34 @@
                 </div>
             </div>
         </div>
-        
+
         <script>
-    // Referencia al campo de búsqueda y al cuerpo de la tabla
-    const searchInput = document.getElementById('searchInput');
-    const tableBody = document.getElementById('tableBody');
+            // Referencia al campo de búsqueda y al cuerpo de la tabla
+            const searchInput = document.getElementById('searchInput');
+            const tableBody = document.getElementById('tableBody');
 
-    // Evento para filtrar la tabla
-    searchInput.addEventListener('keyup', function () {
-      const filter = searchInput.value.toLowerCase(); // Texto ingresado en minúsculas
-      const rows = tableBody.getElementsByTagName('tr'); // Todas las filas de la tabla
+            // Evento para filtrar la tabla
+            searchInput.addEventListener('keyup', function () {
+            const filter = searchInput.value.toLowerCase(); // Texto ingresado en minúsculas
+            const rows = tableBody.getElementsByTagName('tr'); // Todas las filas de la tabla
 
-      for (let row of rows) {
-        const cells = row.getElementsByTagName('td'); // Todas las celdas de la fila
-        let match = false;
+            for (let row of rows) {
+            const cells = row.getElementsByTagName('td'); // Todas las celdas de la fila
+            let match = false;
 
-        // Verificar si alguna celda contiene el texto buscado
-        for (let cell of cells) {
-          if (cell.textContent.toLowerCase().includes(filter)) {
+            // Verificar si alguna celda contiene el texto buscado
+            for (let cell of cells) {
+            if (cell.textContent.toLowerCase().includes(filter)) {
             match = true;
             break;
-          }
-        }
+            }
+            }
 
-        // Mostrar u ocultar la fila según si coincide
-        row.style.display = match ? '' : 'none';
-      }
-    });
-  </script>
-        
+            // Mostrar u ocultar la fila según si coincide
+            row.style.display = match ? '' : 'none';
+            }
+            });
+        </script>
+
     </body>
 </html>

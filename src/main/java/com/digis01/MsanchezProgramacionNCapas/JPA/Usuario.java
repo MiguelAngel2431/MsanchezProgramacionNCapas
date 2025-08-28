@@ -1,7 +1,6 @@
-
 package com.digis01.MsanchezProgramacionNCapas.JPA;
 
-
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,65 +28,102 @@ import org.springframework.format.annotation.DateTimeFormat;
 //@NamedStoredProcedureQuery(name = "Usuarios.addUserDrections", procedureName = "UsuarioDireccionAdd", resultClasses = Usuario.class)
 @Table(name = "usuarios")
 public class Usuario {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusuario")
     private int IdUsuario;
-    
+
     @Column(name = "nombre")
     private String Nombre;
-    
+
     @Column(name = "apellidopaterno")
     private String ApellidoPaterno;
-    
+
     @Column(name = "apellidomaterno")
     private String ApellidoMaterno;
-    
+
     //@DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.DATE)
     @Column(name = "fechanacimiento")
     private Date FechaNacimiento;
- 
+
     @Column(name = "username")
     private String UserName;
-    
+
     @Column(name = "email")
     private String Email;
-    
+
     @Column(name = "password")
     private String Password;
-    
+
     @Column(name = "sexo")
     private String Sexo;
-    
+
     @Column(name = "telefono")
     private String Telefono;
-    
+
     @Column(name = "celular")
     private String Celular;
-    
+
     @Column(name = "curp")
     private String Curp;
-    
+
     /*@Column(name = "idrol")
     public int IdRol;*/
-
     @ManyToOne
-    @JoinColumn(name = "idrol")
+    @JoinColumn(name = "idrol", nullable = true)
+    @Nullable
     public Rol Rol; //Propiedad de navegacion (no ocupa setter ni getter, porque es public)
-    
+
     /*@OneToMany
     @JoinColumn (name = "iddireccion")*/
-    @OneToMany(mappedBy = "Usuario", cascade = CascadeType.ALL, orphanRemoval =  true)
+    @OneToMany(mappedBy = "Usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Direccion> Direcciones = new ArrayList<>();
-    
+
     @Lob
     @Column(name = "imagen")
     private String Imagen;
 
     //Constructores
     public Usuario() {
+    }
+
+    public Usuario(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuarioML) {
+        this.UserName = usuarioML.getUserName();
+        this.Nombre = usuarioML.getNombre();
+        this.ApellidoPaterno = usuarioML.getApellidoPaterno();
+        this.ApellidoMaterno = usuarioML.getApellidoMaterno();
+        this.FechaNacimiento = usuarioML.getFechaNacimiento();
+        this.UserName = usuarioML.getUserName();
+        this.Email = usuarioML.getEmail();
+        this.Password = usuarioML.getPassword();
+        this.Sexo = usuarioML.getSexo();
+        this.Telefono = usuarioML.getTelefono();
+        this.Celular = usuarioML.getCelular();
+        this.Curp = usuarioML.getCurp();
+        this.Imagen = usuarioML.getImagen();
+
+        this.Rol = new Rol();
+        this.Rol.setIdRol(usuarioML.Rol.getIdRol());
+        if (usuarioML.Direcciones.get(0).getIdDireccion() != -1 && usuarioML.Direcciones.size() > 0) {
+
+            for (com.digis01.MsanchezProgramacionNCapas.ML.Direccion Direccione : usuarioML.Direcciones) {
+                Direccion direccion = new Direccion();
+                direccion.setCalle(Direccione.getCalle());
+                direccion.setNumeroInterior(Direccione.getNumeroInterior());
+                direccion.setNumeroExterior(Direccione.getNumeroExterior());
+
+                direccion.Colonia = new Colonia();
+                direccion.Colonia.setIdColonia(Direccione.Colonia.getIdColonia());
+
+                direccion.Usuario = this;
+
+                Direcciones.add(direccion);
+
+            }
+        }
+
     }
 
     /*public Usuario(int idUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, String userName, String email, String password, String sexo, String telefono, String celular, String curp) {
@@ -109,15 +145,12 @@ public class Usuario {
         this.IdRol = IdRol;
         
     }*/
-
     public Usuario(String Nombre, String ApellidoPaterno, String ApellidoMaterno) {
         this.Nombre = Nombre;
         this.ApellidoPaterno = ApellidoPaterno;
         this.ApellidoMaterno = ApellidoMaterno;
         //this.IdRol = IdRol;
     }
-    
-    
 
     // Getter y Setter de idUsuario
     public void setIdUsuario(int idUsuario) {
@@ -226,6 +259,7 @@ public class Usuario {
     public String getCurp() {
         return this.Curp;
     }
+
     /*
     //Getter y Stter de idRol
     public void setIdRol(int idRol) {
@@ -235,7 +269,7 @@ public class Usuario {
     public int getIdRol() {
         return this.IdRol;
     }
-    */
+     */
     //Getter y Setter de Rol
     public void setRol(Rol Rol) {
         this.Rol = Rol;
@@ -244,7 +278,7 @@ public class Usuario {
     public Rol getRol() {
         return Rol;
     }
-    
+
     //Getter y Setter de la lista de Direcciones
     public List<Direccion> getDirecciones() {
         return Direcciones;
@@ -253,14 +287,14 @@ public class Usuario {
     public void setDirecciones(List<Direccion> Direcciones) {
         this.Direcciones = Direcciones;
     }
-    
+
     //Getter y Setter de imagen
     public void setImagen(String imagen) {
         this.Imagen = imagen;
     }
-    
+
     public String getImagen() {
         return this.Imagen;
     }
-    
+
 }

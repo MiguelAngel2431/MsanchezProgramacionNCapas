@@ -28,6 +28,16 @@ public class Direccion {
     //Constructores
     public Direccion() {}
     
+    /*public Direccion(com.digis01.MsanchezProgramacionNCapas.JPA.Direccion direccionJPA) {
+        this.Calle = direccionJPA.getCalle();
+        this.NumeroInterior = direccionJPA.getNumeroInterior();
+        this.NumeroExterior = direccionJPA.getNumeroExterior();
+       // this.IdUsuario = direccionJPA.Usuario.getIdUsuario();
+        
+        this.Colonia = new Colonia();
+        this.Colonia.setIdColonia(direccionJPA.Colonia.getIdColonia());
+    }*/
+    
     public Direccion(int idDireccion, String calle, String numeroInterior, String numeroExterior, int idUsuario) {
         this.IdDireccion = idDireccion;
         this.Calle = calle;

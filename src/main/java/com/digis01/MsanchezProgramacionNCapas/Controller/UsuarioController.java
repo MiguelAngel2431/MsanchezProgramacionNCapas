@@ -158,8 +158,10 @@ public class UsuarioController {
         //return "UsuarioForm";
         if (IdDireccion == null) { //Editar usuario
 
-            Result result = usuarioDAOImplementation.GetById(IdUsuario);
-
+            //Result result = usuarioDAOImplementation.GetById(IdUsuario);
+            
+            Result result = usuarioJPADAOImplementation.GetById(IdUsuario);
+            
             if (result.correct) {
                 model.addAttribute("Usuario", result.object);
                 model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
@@ -248,7 +250,7 @@ public class UsuarioController {
             } else {
 
                 //Imagen
-                if (imagen != null) {
+                if (imagen != null && imagen.getOriginalFilename() != null) {
                     String nombre = imagen.getOriginalFilename();
                     //archivo.jpg
                     //[archivo,jpg]
@@ -303,8 +305,9 @@ public class UsuarioController {
                 }
 
                 //Autoinferencia
-                Result result = usuarioDAOImplementation.EditarUsuario(usuario);
-
+                //Result result = usuarioDAOImplementation.EditarUsuario(usuario);
+                Result result = usuarioJPADAOImplementation.EditarUsuario(usuario);
+                
                 return "redirect:/usuario";
                 //}
 
@@ -316,15 +319,17 @@ public class UsuarioController {
                 //return "UsuarioForm";
                 //} else {
                 //Autoinferencia
-                Result result = usuarioDAOImplementation.AgregarDireccion(usuario);
-
+                //Result result = usuarioDAOImplementation.AgregarDireccion(usuario);
+                usuario.Direcciones.get(0).IdUsuario = usuario.getIdUsuario();
+                Result result = usuarioJPADAOImplementation.AgregarDireccion(usuario.Direcciones.get(0));
+                
                 return "redirect:/usuario";
                 //}
             } else { //Editar direccion
 
                 //Autoinferencia
                 Result result = usuarioDAOImplementation.EditarDireccion(usuario);
-
+                
                 return "redirect:/usuario";
 
             }
@@ -350,8 +355,9 @@ public class UsuarioController {
     @GetMapping("/delete/{IdDireccion}")
     public String Delete(Model model, @PathVariable("IdDireccion") int idDireccion) {
 
-        Result result = usuarioDAOImplementation.EliminarDireccion(idDireccion);
-
+        //Result result = usuarioDAOImplementation.EliminarDireccion(idDireccion);
+        Result result = usuarioJPADAOImplementation.EliminarDireccion(idDireccion);
+        
         return "redirect:/usuario";
     }
 
@@ -359,7 +365,8 @@ public class UsuarioController {
     @GetMapping("/EliminarUsuario/{IdUsuario}")
     public String EliminarUsuario(Model model, @PathVariable("IdUsuario") int idUsuario) {
 
-        Result result = usuarioDAOImplementation.EliminarUsuario(idUsuario);
+        //Result result = usuarioDAOImplementation.EliminarUsuario(idUsuario);
+        Result result = usuarioJPADAOImplementation.EliminarUsuario(idUsuario);
 
         return "redirect:/usuario";
     }
