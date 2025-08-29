@@ -29,6 +29,15 @@ public class Estado {
     //Constructores
     public Estado() {}
     
+    public Estado (com.digis01.MsanchezProgramacionNCapas.ML.Estado estadoML) {
+        this.IdEstado = estadoML.getIdEstado();
+        this.Nombre = estadoML.getNombre();
+        
+        this.Pais = new Pais();
+        this.Pais.setIdPais(estadoML.Pais.getIdPais());
+        
+    }
+    
     /*public Estado(int idEstado, String nombre) {
         this.IdEstado = idEstado;
         this.Nombre = nombre;

@@ -8,6 +8,12 @@ public class Pais {
     //Constructores
     public Pais() {}
     
+    public Pais(com.digis01.MsanchezProgramacionNCapas.JPA.Pais paisJPA) {
+        this.IdPais = paisJPA.getIdPais();
+        this.Nombre = paisJPA.getNombre();
+        
+    }
+    
     public Pais(int idPais, String nombre) {
         this.IdPais = idPais;
         this.Nombre = nombre;

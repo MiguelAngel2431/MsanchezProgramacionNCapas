@@ -33,6 +33,15 @@ public class Colonia {
     //Costructores
     public Colonia() {}
     
+    public Colonia(com.digis01.MsanchezProgramacionNCapas.ML.Colonia coloniaML) {
+        this.IdColonia = coloniaML.getIdColonia();
+        this.Nombre = coloniaML.getNombre();
+        this.CodigoPostal = coloniaML.getCodigoPostal();
+        
+        this.Municipio = new Municipio();
+        this.Municipio.setIdMunicipio(coloniaML.Municipio.getIdMunicipio());
+    }
+    
     /*public Colonia (int idColonia, String nombre, String codigoPostal) {
         this.IdColonia = idColonia;
         this.Nombre = nombre;

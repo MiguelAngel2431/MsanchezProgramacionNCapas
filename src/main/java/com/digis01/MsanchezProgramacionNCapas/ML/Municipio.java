@@ -16,6 +16,14 @@ public class Municipio {
     //Constructores
     public Municipio() {}
     
+    public Municipio(com.digis01.MsanchezProgramacionNCapas.JPA.Municipio municipioJPA) {
+        this.IdMunicipio = municipioJPA.getIdMunicipio();
+        this.Nombre = municipioJPA.getNombre();
+        
+        this.Estado = new Estado();
+        this.Estado.setIdEstado(municipioJPA.Estado.getIdEstado());
+    }
+    
     public Municipio(int idMunicipio, String nombre) {
         this.IdMunicipio = idMunicipio;
         this.Nombre = nombre;

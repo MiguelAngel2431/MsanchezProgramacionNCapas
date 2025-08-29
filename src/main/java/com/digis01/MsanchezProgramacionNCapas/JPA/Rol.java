@@ -21,6 +21,12 @@ public class Rol {
     //Constructores
     public Rol(){}
     
+    public Rol(com.digis01.MsanchezProgramacionNCapas.ML.Rol rolML) {
+        this.IdRol = rolML.getIdRol();
+        this.Nombre = rolML.getNombre();
+        
+    }
+    
     public Rol(int idRol, String nombre) {
         this.IdRol = idRol;
         this.Nombre = nombre;

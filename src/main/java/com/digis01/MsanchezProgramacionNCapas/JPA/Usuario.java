@@ -68,6 +68,9 @@ public class Usuario {
 
     @Column(name = "curp")
     private String Curp;
+    
+    /*@Column(name = "status")
+    private int Status;*/
 
     /*@Column(name = "idrol")
     public int IdRol;*/
@@ -103,13 +106,18 @@ public class Usuario {
         this.Celular = usuarioML.getCelular();
         this.Curp = usuarioML.getCurp();
         this.Imagen = usuarioML.getImagen();
+        //this.Status = usuarioML.getStatus();
 
         this.Rol = new Rol();
         this.Rol.setIdRol(usuarioML.Rol.getIdRol());
-        if (usuarioML.Direcciones.get(0).getIdDireccion() != -1 && usuarioML.Direcciones.size() > 0) {
+        
+        if (usuarioML.Direcciones.get(0).getIdDireccion() == -1) { 
+            usuarioML.Direcciones = null;
+        } else {
 
             for (com.digis01.MsanchezProgramacionNCapas.ML.Direccion Direccione : usuarioML.Direcciones) {
                 Direccion direccion = new Direccion();
+                direccion.setIdDireccion(Direccione.getIdDireccion());
                 direccion.setCalle(Direccione.getCalle());
                 direccion.setNumeroInterior(Direccione.getNumeroInterior());
                 direccion.setNumeroExterior(Direccione.getNumeroExterior());
@@ -296,5 +304,15 @@ public class Usuario {
     public String getImagen() {
         return this.Imagen;
     }
+    
+    //Getter y setter de status
+    /*public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int Status) {
+        this.Status = Status;
+    }*/
+    
 
 }

@@ -28,7 +28,8 @@ public class Direccion {
     //Constructores
     public Direccion() {}
     
-    /*public Direccion(com.digis01.MsanchezProgramacionNCapas.JPA.Direccion direccionJPA) {
+    public Direccion(com.digis01.MsanchezProgramacionNCapas.JPA.Direccion direccionJPA) {
+        this.IdDireccion = direccionJPA.getIdDireccion();
         this.Calle = direccionJPA.getCalle();
         this.NumeroInterior = direccionJPA.getNumeroInterior();
         this.NumeroExterior = direccionJPA.getNumeroExterior();
@@ -36,7 +37,21 @@ public class Direccion {
         
         this.Colonia = new Colonia();
         this.Colonia.setIdColonia(direccionJPA.Colonia.getIdColonia());
-    }*/
+        this.Colonia.setNombre(direccionJPA.Colonia.getNombre());
+        this.Colonia.setCodigoPostal(direccionJPA.Colonia.getCodigoPostal());
+        
+        this.Colonia.Municipio = new Municipio();
+        this.Colonia.Municipio.setIdMunicipio(direccionJPA.Colonia.Municipio.getIdMunicipio());
+        this.Colonia.Municipio.setNombre(direccionJPA.Colonia.Municipio.getNombre());
+        
+        this.Colonia.Municipio.Estado = new Estado();
+        this.Colonia.Municipio.Estado.setIdEstado(direccionJPA.Colonia.Municipio.Estado.getIdEstado());
+        this.Colonia.Municipio.Estado.setNombre(direccionJPA.Colonia.Municipio.Estado.getNombre());
+        
+        this.Colonia.Municipio.Estado.Pais = new Pais();
+        this.Colonia.Municipio.Estado.Pais.setIdPais(direccionJPA.Colonia.Municipio.Estado.Pais.getIdPais());
+        this.Colonia.Municipio.Estado.Pais.setNombre(direccionJPA.Colonia.Municipio.Estado.Pais.getNombre());
+    }
     
     public Direccion(int idDireccion, String calle, String numeroInterior, String numeroExterior, int idUsuario) {
         this.IdDireccion = idDireccion;

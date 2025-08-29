@@ -1,10 +1,14 @@
 package com.digis01.MsanchezProgramacionNCapas.Controller;
 
 import com.digis01.MsanchezProgramacionNCapas.DAO.ColoniaDAOImplementation;
+import com.digis01.MsanchezProgramacionNCapas.DAO.DireccionJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.EstadoDAOImplementation;
+import com.digis01.MsanchezProgramacionNCapas.DAO.EstadoJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.MunicipioDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.PaisDAOImplementation;
+import com.digis01.MsanchezProgramacionNCapas.DAO.PaisJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.RolDAOImplementation;
+import com.digis01.MsanchezProgramacionNCapas.DAO.RolJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.UsuarioDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.UsuarioJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.ML.Colonia;
@@ -58,15 +62,27 @@ public class UsuarioController {
     
     @Autowired
     private UsuarioJPADAOImplementation usuarioJPADAOImplementation;
+    
+    @Autowired
+    private DireccionJPADAOImplementation direccionJPADAOImplementation;
 
     @Autowired //Inyeccion de dependencias
     private RolDAOImplementation rolDAOImplementation;
+    
+    @Autowired //Inyeccion de dependencias
+    private RolJPADAOImplementation rolJPADAOImplementation;
 
     @Autowired //Inyeccion de dependencias
     private PaisDAOImplementation paisDAOImplementation;
+    
+    @Autowired //Inyeccion de dependencias
+    private PaisJPADAOImplementation paisJPADAOImplementation;
 
     @Autowired //Inyeccion de dependencias
     private EstadoDAOImplementation estadoDAOImplementation;
+    
+    @Autowired //Inyeccion de dependencias
+    private EstadoJPADAOImplementation estadoJPADAOImplementation;
 
     @Autowired //Inyeccion de dependencias
     private MunicipioDAOImplementation municipioDAOImplementation;
@@ -120,9 +136,9 @@ public class UsuarioController {
 
         if (idUsuario == 0) { //Manda al formulario completo (en blanco)
             //Result result = rolDAOImplementation.GetAll();
-            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
 
-            model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
+            model.addAttribute("paises", paisJPADAOImplementation.GetAll().objects);
 
             //Creamos un usario para que pueda escribir en el
             Usuario usuario = new Usuario();
@@ -136,8 +152,9 @@ public class UsuarioController {
             return "UsuarioForm";
 
         } else { //Manda a la vista del detalle del Usuario
-            Result result = usuarioDAOImplementation.GetDetail(idUsuario);
-
+            //Result result = usuarioDAOImplementation.GetDetail(idUsuario);
+            Result result = usuarioJPADAOImplementation.GetDetail(idUsuario);
+            
             if (result.correct) {
                 model.addAttribute("usuario", result.object);
             } else {
@@ -161,10 +178,13 @@ public class UsuarioController {
             //Result result = usuarioDAOImplementation.GetById(IdUsuario);
             
             Result result = usuarioJPADAOImplementation.GetById(IdUsuario);
-            
+            Usuario usuario = (Usuario) result.object;
+            usuario.Direcciones = new ArrayList<>();
+            usuario.Direcciones.add(new Direccion(-1));
             if (result.correct) {
                 model.addAttribute("Usuario", result.object);
-                model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+                //model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+                model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
 
             } else {
                 model.addAttribute("Usuario", null);
@@ -176,13 +196,13 @@ public class UsuarioController {
             //model.addAttribute("Usuario", new Usuario());
         } else if (IdDireccion == 0) { //Agregar direccion
 
-            Result result = usuarioDAOImplementation.GetId(IdUsuario);
+            /*Result result = usuarioDAOImplementation.GetId(IdUsuario);
 
             if (result.correct) {
                 model.addAttribute("Usuario", result.object);
             } else {
                 model.addAttribute("Usuario", null);
-            }
+            }*/
 
             //Recuperamos el Id del usuario por medio del request param
             Usuario usuario = new Usuario();
@@ -191,28 +211,35 @@ public class UsuarioController {
             usuario.Direcciones.add(new Direccion());
 
             model.addAttribute("Usuario", usuario);
-            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
 
             model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
 
             //model.addAttribute("Usuario", new Usuario());
         } else {// Editar direccion
 
-            Result result = usuarioDAOImplementation.DireccionGetByIdDireccion(IdDireccion);
-
+            //Result result = usuarioDAOImplementation.DireccionGetByIdDireccion(IdDireccion);
+            Result result = direccionJPADAOImplementation.GetById(IdDireccion);
+            
             if (result.correct) {
 
                 Usuario usuario = new Usuario();
                 usuario.setIdUsuario(IdUsuario);
                 usuario.setDirecciones(new ArrayList<>());
-                usuario.getDirecciones().add((Direccion) result.object);
+                //usuario.getDirecciones().add((Direccion) result.object);
+                
+                
+                
+                Direccion dire = new Direccion((com.digis01.MsanchezProgramacionNCapas.JPA.Direccion) result.object);
+                
+                usuario.Direcciones.add(dire);
                 
                 //Result resultEstados = estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais());
 
                 model.addAttribute("Usuario", usuario);
 
-                model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
-                model.addAttribute("estados", estadoDAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais()).objects);
+                model.addAttribute("paises", paisJPADAOImplementation.GetAll().objects);
+                model.addAttribute("estados", estadoJPADAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais()).objects);
                 model.addAttribute("municipios", municipioDAOImplementation.MunicipioByIdEstado(usuario.Direcciones.get(0).Colonia.Municipio.Estado.getIdEstado()).objects);
                 model.addAttribute("colonias", coloniaDAOImplementation.ColoniaByIdMunicipio(usuario.Direcciones.get(0).Colonia.Municipio.getIdMunicipio()).objects);
 
@@ -244,7 +271,7 @@ public class UsuarioController {
                 model.addAttribute("Usuario", usuario);
 
                 //Volver a pintar la lista de roles
-                model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+                model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
 
                 return "UsuarioForm";
             } else {
@@ -282,7 +309,7 @@ public class UsuarioController {
                 model.addAttribute("Usuario", usuario);
 
                 //Volver a pintar la lista de roles
-                model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+                model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
 
                 //return "UsuarioForm";
                 //} else {
@@ -321,15 +348,16 @@ public class UsuarioController {
                 //Autoinferencia
                 //Result result = usuarioDAOImplementation.AgregarDireccion(usuario);
                 usuario.Direcciones.get(0).IdUsuario = usuario.getIdUsuario();
-                Result result = usuarioJPADAOImplementation.AgregarDireccion(usuario.Direcciones.get(0));
+                Result result = direccionJPADAOImplementation.Add(usuario);
                 
                 return "redirect:/usuario";
                 //}
             } else { //Editar direccion
 
                 //Autoinferencia
-                Result result = usuarioDAOImplementation.EditarDireccion(usuario);
-                
+                //Result result = usuarioDAOImplementation.EditarDireccion(usuario);
+                //usuario.Direcciones.get(0).IdUsuario = usuario.getIdUsuario();
+                Result result = direccionJPADAOImplementation.Update(usuario);
                 return "redirect:/usuario";
 
             }
@@ -340,7 +368,7 @@ public class UsuarioController {
             model.addAttribute("Usuario", usuario);
 
             //Volver a pintar la lista de roles
-            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
 
             return "UsuarioForm";
         } else {
@@ -398,7 +426,7 @@ public class UsuarioController {
     @ResponseBody //Retorna un dato estructurado - JSON
     public Result EstadoByIdPais(@PathVariable int IdPais) {
 
-        return estadoDAOImplementation.EstadoByIdPais(IdPais);
+        return estadoJPADAOImplementation.EstadoByIdPais(IdPais);
     }
 
     //DropdownList Estado

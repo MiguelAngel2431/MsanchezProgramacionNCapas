@@ -31,6 +31,14 @@ public class Municipio {
     //Constructores
     public Municipio() {}
     
+    public Municipio(com.digis01.MsanchezProgramacionNCapas.ML.Municipio municipioML) {
+        this.IdMunicipio = municipioML.getIdMunicipio();
+        this.Nombre = municipioML.getNombre();
+        
+        this.Estado = new Estado();
+        this.Estado.setIdEstado(municipioML.Estado.getIdEstado());
+    }
+    
     /*public Municipio(int idMunicipio, String nombre) {
         this.IdMunicipio = idMunicipio;
         this.Nombre = nombre;

@@ -78,31 +78,6 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
 
     @Transactional
     @Override
-    public Result AgregarDireccion(com.digis01.MsanchezProgramacionNCapas.ML.Direccion direccionML) {
-        Result result = new Result();
-
-        try {
-            //Direccion direccionJPA = entityManager.find(Direccion.class, "IdUsuario");
-
-//            usuarioML.Rol = new Rol();
-//            usuarioML.Rol.setIdRol(0);
-            Direccion direccionJPA = new Direccion(direccionML);
-
-            entityManager.persist(direccionJPA);
-
-            result.correct = true;
-
-        } catch (Exception ex) {
-            result.correct = true;
-            result.errorMessage = ex.getLocalizedMessage();
-            result.ex = ex;
-        }
-
-        return result;
-    }
-
-    @Transactional
-    @Override
     public Result EliminarUsuario(int IdUsuario) {
         Result result = new Result();
 
@@ -148,33 +123,20 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
     @Transactional
     @Override
     public Result EditarUsuario(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuarioML) {
+        
         Result result = new Result();
 
         try {
-
-//            Usuario usuarioJPA = new Usuario(usuarioML);
-
-            //Usuario UsuarioJPADos = entityManager.find(Usuario.class, usuarioML.getIdUsuario());
             
-            Usuario usuarioJPA = entityManager.find(Usuario.class, usuarioML.getIdUsuario());
+            Usuario usuarioJPA = new Usuario(usuarioML);
             
-            usuarioJPA.setNombre(usuarioML.getNombre());
-            usuarioJPA.setUserName(usuarioML.getUserName());
-            usuarioJPA.setApellidoPaterno(usuarioML.getApellidoPaterno());
-            usuarioJPA.setApellidoMaterno(usuarioML.getApellidoMaterno());
-            usuarioJPA.setEmail(usuarioML.getEmail());
-            usuarioJPA.setPassword(usuarioML.getPassword());
-            usuarioJPA.setSexo(usuarioML.getSexo());
-            usuarioJPA.setTelefono(usuarioML.getTelefono());
-            usuarioJPA.setCelular(usuarioML.getCelular());
-            usuarioJPA.setCurp(usuarioML.getCurp());
-            usuarioJPA.setImagen(usuarioML.getImagen());
+            //Al usuario que tiene las direcciones vacias, le asignamos las direcciones que vienen directamente de la BD
+            Usuario usuarioDB = entityManager.find(Usuario.class, usuarioML.getIdUsuario());
             
+            usuarioJPA.Direcciones = usuarioDB.Direcciones;
             
-            //entityManager.remove(usuarioJPA);
-
-            Usuario usuarioJPADos  = entityManager.merge(usuarioJPA);
-
+            entityManager.merge(usuarioJPA);
+            
             result.correct = true;
 
             
@@ -188,22 +150,22 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
         return result;
     }
 
+    //Editar usuario
     @Override
     public Result GetById(int idUsuario) {
         Result result = new Result();
 
         try {
 
-            //TypedQuery<Usuario> queryUsuario = entityManager.createQuery("FROM Usuario", Usuario.class);
-            //Usuario usuario = queryUsuario.getSingleResult();
             Usuario usuarioJPA = entityManager.find(Usuario.class, idUsuario);
-            usuarioJPA.Direcciones = new ArrayList<>();
+            
+            //usuarioJPA.Direcciones = new ArrayList<>();
+            //usuarioJPA.Direcciones.add(new com.digis01.MsanchezProgramacionNCapas.JPA.Direccion(-1));
+            
+            com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuarioML = new com.digis01.MsanchezProgramacionNCapas.ML.Usuario(usuarioJPA);
 
-            usuarioJPA.Direcciones.add(new com.digis01.MsanchezProgramacionNCapas.JPA.Direccion(-1));
+            result.object = usuarioML;
 
-            result.object = usuarioJPA;
-
-            // entityManager.find(Usuario.class,idUsuario);
             result.correct = true;
 
         } catch (Exception ex) {
@@ -241,6 +203,56 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
             result.correct = true;
 
             
+
+        } catch (Exception ex) {
+            result.correct = true;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
+        return result;
+    }
+
+    @Override
+    public Result DireccionGetByIdDireccion(int idDireccion) {
+       Result result = new Result();
+
+        try {
+
+            //TypedQuery<Usuario> queryUsuario = entityManager.createQuery("FROM Usuario", Usuario.class);
+            //Usuario usuario = queryUsuario.getSingleResult();
+            Direccion direccionJPA = entityManager.find(Direccion.class, idDireccion);
+            //usuarioJPA.Direcciones = new ArrayList<>();
+
+            //usuarioJPA.Direcciones.add(new com.digis01.MsanchezProgramacionNCapas.JPA.Direccion(-1));
+
+            result.object = direccionJPA;
+
+            // entityManager.find(Usuario.class,idUsuario);
+            result.correct = true;
+
+        } catch (Exception ex) {
+            result.correct = true;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
+        return result;
+    }
+
+    @Override
+    public Result GetDetail(int idUsuario) {
+        Result result = new Result();
+
+        try {
+
+            Usuario usuarioJPA = entityManager.find(Usuario.class, idUsuario);
+            
+            com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuarioML = new com.digis01.MsanchezProgramacionNCapas.ML.Usuario(usuarioJPA);
+
+            result.object = usuarioML;
+
+            result.correct = true;
 
         } catch (Exception ex) {
             result.correct = true;

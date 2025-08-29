@@ -9,6 +9,12 @@ public class Rol {
     //Constructores
     public Rol(){}
     
+    public Rol(com.digis01.MsanchezProgramacionNCapas.JPA.Rol rolJPA) {
+        this.IdRol = rolJPA.getIdRol();
+        this.Nombre = rolJPA.getNombre();
+        
+    }
+    
     public Rol(int idRol, String nombre) {
         this.IdRol = idRol;
         this.Nombre = nombre;

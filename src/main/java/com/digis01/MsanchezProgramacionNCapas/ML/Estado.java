@@ -15,6 +15,15 @@ public class Estado {
     //Constructores
     public Estado() {}
     
+    public Estado(com.digis01.MsanchezProgramacionNCapas.JPA.Estado estadoJPA) {
+        this.IdEstado = estadoJPA.getIdEstado();
+        this.Nombre = estadoJPA.getNombre();
+        
+        this.Pais = new Pais();
+        this.Pais.setIdPais(estadoJPA.Pais.getIdPais());
+        
+    }
+    
     public Estado(int idEstado, String nombre) {
         this.IdEstado = idEstado;
         this.Nombre = nombre;

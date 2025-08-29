@@ -21,6 +21,12 @@ public class Pais {
     //Constructores
     public Pais() {}
     
+    public Pais(com.digis01.MsanchezProgramacionNCapas.ML.Pais paisML) {
+        this.IdPais = paisML.getIdPais();
+        this.Nombre = paisML.getNombre();
+        
+    }
+    
     /*public Pais(int idPais, String nombre) {
         this.IdPais = idPais;
         this.Nombre = nombre;

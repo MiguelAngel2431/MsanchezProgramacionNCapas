@@ -44,16 +44,30 @@ public class Direccion {
     //Constructores
     public Direccion() {}
     
-    public Direccion(com.digis01.MsanchezProgramacionNCapas.ML.Direccion direccionML) {
+    public Direccion(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuarioML) {
+        
+        com.digis01.MsanchezProgramacionNCapas.ML.Direccion direccionML = usuarioML.Direcciones.get(0);
+        
+        this.IdDireccion = direccionML.getIdDireccion();
         this.Calle = direccionML.getCalle();
         this.NumeroInterior = direccionML.getNumeroInterior();
         this.NumeroExterior = direccionML.getNumeroExterior();
         
         this.Usuario = new Usuario();
-        this.Usuario.setIdUsuario(direccionML.getIdUsuario());
+        this.Usuario.setIdUsuario(usuarioML.getIdUsuario());
         
         this.Colonia = new Colonia();
         this.Colonia.setIdColonia(direccionML.Colonia.getIdColonia());
+        /*
+        this.Colonia.Municipio = new Municipio();
+        this.Colonia.Municipio.setIdMunicipio(direccionML.Colonia.Municipio.getIdMunicipio());
+        
+        this.Colonia.Municipio.Estado = new Estado();
+        this.Colonia.Municipio.Estado.setIdEstado(direccionML.Colonia.Municipio.Estado.getIdEstado());
+        
+        this.Colonia.Municipio.Estado.Pais = new Pais();
+        this.Colonia.Municipio.Estado.Pais.setIdPais(direccionML.Colonia.Municipio.Estado.Pais.getIdPais());
+        */
         
          
         

@@ -16,6 +16,15 @@ public class Colonia {
     //Costructores
     public Colonia() {}
     
+    public Colonia(com.digis01.MsanchezProgramacionNCapas.JPA.Colonia coloniaJPA) {
+        this.IdColonia = coloniaJPA.getIdColonia();
+        this.Nombre = coloniaJPA.getNombre();
+        this.CodigoPostal = coloniaJPA.getCodigoPostal();
+        
+        this.Municipio = new Municipio();
+        this.Municipio.setIdMunicipio(coloniaJPA.Municipio.getIdMunicipio());
+    }
+    
     public Colonia (int idColonia, String nombre, String codigoPostal) {
         this.IdColonia = idColonia;
         this.Nombre = nombre;
