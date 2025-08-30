@@ -28,7 +28,7 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Result GetAll() {
+    public Result GetAll(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuarioML) {
 
         Result result = new Result();
 
@@ -62,6 +62,7 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
         try {
 
             Usuario usuarioJPA = new Usuario(usuarioML);
+            usuarioJPA.setStatus(1);
 
             entityManager.persist(usuarioJPA);
 
@@ -86,28 +87,6 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
             Usuario usuarioJPA = entityManager.find(Usuario.class, IdUsuario);
 
             entityManager.remove(usuarioJPA);
-
-            result.correct = true;
-
-        } catch (Exception ex) {
-            result.correct = true;
-            result.errorMessage = ex.getLocalizedMessage();
-            result.ex = ex;
-        }
-
-        return result;
-    }
-
-    @Transactional
-    @Override
-    public Result EliminarDireccion(int IdDireccion) {
-        Result result = new Result();
-
-        try {
-
-            Direccion direccionJPA = entityManager.find(Direccion.class, IdDireccion);
-
-            entityManager.remove(direccionJPA);
 
             result.correct = true;
 
@@ -177,7 +156,7 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
         return result;
     }
 
-    @Override
+    /*@Override
     public Result EditarDireccion(com.digis01.MsanchezProgramacionNCapas.ML.Direccion direccionML) {
         Result result = new Result();
 
@@ -211,9 +190,9 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
         }
 
         return result;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public Result DireccionGetByIdDireccion(int idDireccion) {
        Result result = new Result();
 
@@ -238,7 +217,7 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
         }
 
         return result;
-    }
+    }*/
 
     @Override
     public Result GetDetail(int idUsuario) {
@@ -260,6 +239,31 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO {
             result.ex = ex;
         }
 
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public Result BajaLogica(int IdUsuario) {
+        Result result = new Result();
+        
+        try {
+            
+            Usuario usuarioJPA = entityManager.find(Usuario.class, IdUsuario);
+            //usuarioJPA.setStatus(usuarioJPA.getStatus() == 1 ? usuarioJPA.setStatus(0) : usuarioJPA.setStatus(1));
+            
+            
+            usuarioJPA.setStatus(usuarioJPA.getStatus() == 1 ? 0 : 1);
+
+            entityManager.merge(usuarioJPA);
+
+            
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
         return result;
     }
 

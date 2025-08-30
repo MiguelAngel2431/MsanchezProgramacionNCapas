@@ -1,10 +1,12 @@
 package com.digis01.MsanchezProgramacionNCapas.Controller;
 
 import com.digis01.MsanchezProgramacionNCapas.DAO.ColoniaDAOImplementation;
+import com.digis01.MsanchezProgramacionNCapas.DAO.ColoniaJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.DireccionJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.EstadoDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.EstadoJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.MunicipioDAOImplementation;
+import com.digis01.MsanchezProgramacionNCapas.DAO.MunicipioJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.PaisDAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.PaisJPADAOImplementation;
 import com.digis01.MsanchezProgramacionNCapas.DAO.RolDAOImplementation;
@@ -86,16 +88,22 @@ public class UsuarioController {
 
     @Autowired //Inyeccion de dependencias
     private MunicipioDAOImplementation municipioDAOImplementation;
+    
+    @Autowired //Inyeccion de dependencias
+    private MunicipioJPADAOImplementation municipioJPADAOImplementation;
 
     @Autowired //Inyeccion de dependencias
     private ColoniaDAOImplementation coloniaDAOImplementation;
+    
+    @Autowired //Inyeccion de dependencias
+    private ColoniaJPADAOImplementation coloniaJPADAOImplementation;
 
     //@GetMapping // verbo http GET, POST, PUT, DELETE, PATCH
     //Metodo para retornar todos los usarios a la vista
     @GetMapping
     public String Index(Model model) {
         //Result result = usuarioDAOImplementation.GetAll(new Usuario("", "", "", 0));
-        Result result = usuarioJPADAOImplementation.GetAll();
+        Result result = usuarioJPADAOImplementation.GetAll(new Usuario("", "", "", 0));
         
         //usuarioJPADAOImplementation.GetAll();
         
@@ -103,7 +111,7 @@ public class UsuarioController {
 
         if (result.correct) {
             model.addAttribute("usuarios", result.objects);
-            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
         } else {
             model.addAttribute("usuarios", null);
         }
@@ -121,7 +129,7 @@ public class UsuarioController {
 
         if (result.correct) {
             model.addAttribute("usuarios", result.objects);
-            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
         } else {
             model.addAttribute("usuarios", null);
         }
@@ -191,7 +199,7 @@ public class UsuarioController {
             }
 
             //model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
-            model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
+            model.addAttribute("paises", paisJPADAOImplementation.GetAll().objects);
 
             //model.addAttribute("Usuario", new Usuario());
         } else if (IdDireccion == 0) { //Agregar direccion
@@ -213,7 +221,7 @@ public class UsuarioController {
             model.addAttribute("Usuario", usuario);
             model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
 
-            model.addAttribute("paises", paisDAOImplementation.GetAll().objects);
+            model.addAttribute("paises", paisJPADAOImplementation.GetAll().objects);
 
             //model.addAttribute("Usuario", new Usuario());
         } else {// Editar direccion
@@ -240,8 +248,8 @@ public class UsuarioController {
 
                 model.addAttribute("paises", paisJPADAOImplementation.GetAll().objects);
                 model.addAttribute("estados", estadoJPADAOImplementation.EstadoByIdPais(usuario.Direcciones.get(0).Colonia.Municipio.Estado.Pais.getIdPais()).objects);
-                model.addAttribute("municipios", municipioDAOImplementation.MunicipioByIdEstado(usuario.Direcciones.get(0).Colonia.Municipio.Estado.getIdEstado()).objects);
-                model.addAttribute("colonias", coloniaDAOImplementation.ColoniaByIdMunicipio(usuario.Direcciones.get(0).Colonia.Municipio.getIdMunicipio()).objects);
+                model.addAttribute("municipios", municipioJPADAOImplementation.MunicipioByIdEstado(usuario.Direcciones.get(0).Colonia.Municipio.Estado.getIdEstado()).objects);
+                model.addAttribute("colonias", coloniaJPADAOImplementation.ColoniaByIdMunicipio(usuario.Direcciones.get(0).Colonia.Municipio.getIdMunicipio()).objects);
 
             } else {
                 model.addAttribute("Usuario", null);
@@ -384,7 +392,7 @@ public class UsuarioController {
     public String Delete(Model model, @PathVariable("IdDireccion") int idDireccion) {
 
         //Result result = usuarioDAOImplementation.EliminarDireccion(idDireccion);
-        Result result = usuarioJPADAOImplementation.EliminarDireccion(idDireccion);
+        Result result = direccionJPADAOImplementation.EliminarDireccion(idDireccion);
         
         return "redirect:/usuario";
     }
@@ -434,7 +442,7 @@ public class UsuarioController {
     @ResponseBody //Retorna un dato estructurado - JSON
     public Result MunicipioByIdEstado(@PathVariable int IdEstado) {
 
-        return municipioDAOImplementation.MunicipioByIdEstado(IdEstado);
+        return municipioJPADAOImplementation.MunicipioByIdEstado(IdEstado);
     }
 
     //DropdownList Municipio
@@ -442,7 +450,7 @@ public class UsuarioController {
     @ResponseBody //Retorna un dato estructurado - JSON
     public Result ColoniaByIdMunicipio(@PathVariable int IdMunicipio) {
 
-        return coloniaDAOImplementation.ColoniaByIdMunicipio(IdMunicipio);
+        return coloniaJPADAOImplementation.ColoniaByIdMunicipio(IdMunicipio);
     }
 
     @GetMapping("cargamasiva")
@@ -820,5 +828,12 @@ public class UsuarioController {
 
         return errores;
     }
+    
+    @GetMapping("/cambiarEstado/{IdUsuario}")
+    @ResponseBody
+    public Result cambiarEstado(@PathVariable int IdUsuario) {
+        
+        return usuarioJPADAOImplementation.BajaLogica(IdUsuario);
+    } 
 
 }

@@ -30,9 +30,8 @@
                 font-family: "Playwrite AU NSW", cursive;
                 font-optical-sizing: auto;
                 font-style: normal;
-
-
-
+                display: inline-block;
+                //overflow: auto;
 
             }
 
@@ -56,6 +55,21 @@
                 font-weight: 400;
                 font-style: normal;
                 font-size: 20px;
+                display: flexbox;
+            }
+            
+            .table-responsive {
+                
+                height: 270px;
+            }
+            
+            .edit-direccion {
+                border-radius: 50% 50% 0 0;
+                
+            }
+            
+            .delete-direccion {
+                border-radius: 0 0 50% 50%;
             }
 
             .name-user {
@@ -72,10 +86,17 @@
                 visibility: hidden;
                 position: absolute;
             }
+            
+            .btn-add-user {
+                border-radius: 20px;
+            }
 
             .btn-add-direction {
                 visibility: visible;
+                border-radius: 20px;
             }
+            
+            
 
             @media (max-width: 768px) {
                 .div-btn-adddirecion-responsive {
@@ -107,7 +128,7 @@
     <body layout:fragment="body">
         <div class="container">
             <div class="row justify-content-center container-info">
-                <div class="personal-info col-lg-4 col-md-5 col-sm-12" style="height: 530px">
+                <div class="personal-info col-lg-4 col-md-5 col-sm-12">
 
                     <!-- Editar usuario -->
                     <a class="btn btn-warning btn-add-user" th:href="|@{/usuario/formEditable?IdUsuario=}${usuario.IdUsuario}|">Editar <i class="bi bi-pencil-square"></i></a>
@@ -130,7 +151,7 @@
 
                 </div>
 
-                <div class="directions col-lg-8 col-md-7 col-sm-12" style="height: 530px">
+                <div class="directions col-lg-8 col-md-7 col-sm-12" >
 
                     <!-- Agregar direccion -->
                     <a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success btn-util btn-add-direction">Agregar direccion &nbsp; <i class="bi bi-house-add"></i></a>
@@ -172,9 +193,9 @@
                                     <!-- Util -->
                                     <td>
                                         <!-- Editar direccion -->
-                                        <a th:href="|@{/usuario/formEditable?IdDireccion=}${direccion.IdDireccion}&IdUsuario=${usuario.IdUsuario}|" class="btn btn-warning btn-util"><i class="bi bi-pencil-square"></i></a>
+                                        <a th:href="|@{/usuario/formEditable?IdDireccion=}${direccion.IdDireccion}&IdUsuario=${usuario.IdUsuario}|" class="btn btn-warning btn-util edit-direccion"><i class="bi bi-pencil-square"></i></a>
                                         <!-- Eliminar direccion -->
-                                        <a th:href="@{/usuario/delete/{idDireccion}(idDireccion = ${direccion.IdDireccion})}" class="btn btn-danger btn-util"><i class="bi bi-trash3-fill"></i></a>
+                                        <a th:href="@{/usuario/delete/{idDireccion}(idDireccion = ${direccion.IdDireccion})}" class="btn btn-danger btn-util delete-direccion"><i class="bi bi-trash3-fill"></i></a>
                                     </td>
                                     <td th:text="${direccion.Calle}"></td>
                                     <td th:text="${direccion.NumeroInterior}"></td>

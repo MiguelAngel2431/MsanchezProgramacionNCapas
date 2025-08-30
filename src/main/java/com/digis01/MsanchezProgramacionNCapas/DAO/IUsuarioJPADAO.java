@@ -11,16 +11,15 @@ import com.digis01.MsanchezProgramacionNCapas.ML.Result;
  * @author Alien 5
  */
 public interface IUsuarioJPADAO {
-    Result GetAll();
+    Result GetAll(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuario);
     Result GetById(int idUsuario);
     Result GetDetail(int idUsuario);
     Result Add(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuario);
     Result EliminarUsuario(int IdUsuario);
     Result EditarUsuario(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuario);
+    Result BajaLogica(int IdUsuario);
     
-    Result DireccionGetByIdDireccion(int idDireccion);
-    
-    Result EliminarDireccion(int IdDireccion);
-    Result EditarDireccion(com.digis01.MsanchezProgramacionNCapas.ML.Direccion direccion);
+    //Result DireccionGetByIdDireccion(int idDireccion);
+    //Result EditarDireccion(com.digis01.MsanchezProgramacionNCapas.ML.Direccion direccion);
     
 }   

@@ -83,7 +83,7 @@ public class Usuario {
         this.Celular = usuarioJPA.getCelular();
         this.Curp = usuarioJPA.getCurp();
         this.Imagen = usuarioJPA.getImagen();
-        //this.Status = usuarioJPA.getStatus();
+        this.Status = usuarioJPA.getStatus();
 
         this.Rol = new Rol();
         this.Rol.setIdRol(usuarioJPA.Rol.getIdRol());

@@ -7,4 +7,5 @@ public interface IDireccionJPADAO {
     Result GetById(int idDireccion);
     Result Update(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuarioML);
     Result Add(com.digis01.MsanchezProgramacionNCapas.ML.Usuario direccion);
+    Result EliminarDireccion(int IdDireccion);
 }

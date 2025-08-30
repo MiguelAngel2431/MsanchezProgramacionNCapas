@@ -13,6 +13,14 @@
                 height: 40px;
                 border-radius: 50%
             }
+            
+            .edit-user {
+                border-radius: 50% 50% 0 0;
+            }
+            
+            .delete-user {
+                border-radius: 0 0 50% 50%;
+            }
 
             .title {
                 text-transform: uppercase;
@@ -127,6 +135,15 @@
                 font-style: normal;
                 font-size: 20px;
 
+            }
+            
+            td {
+                text-align: center; /* Centra horizontalmente */
+                vertical-align: middle; /* Centra verticalmente */
+            }
+            
+            .table-responsive {
+                box-shadow: 0 0 20px 0 grey;
             }
 
             .td-nombreUser{
@@ -329,27 +346,27 @@
                 <table class="table table-hover table-bordered">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Status</th>
-                            <th class="col-1">Imagen</th>
-                            <th scope="col-2">Nombre</th>
-                            <th scope="col">Direccion</th>
+                            <th >#</th>
+                            <th >Status</th>
+                            <th >Imagen</th>
+                            <th >Nombre</th>
+                            <th >Direccion</th>
 
-                            <th scope="col">Contacto</th>
+                            <th>Contacto</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
                         <tr th:each="usuario : ${usuarios}">
                             <!-- Util -->
                             <td>
-                                <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-warning btn-util"><i class="bi bi-pencil-square"></i></a>
-                                <a th:href="@{/usuario/EliminarUsuario/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger btn-util"><i class="bi bi-trash3-fill"></i></a>
+                                <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-warning btn-util edit-user"><i class="bi bi-pencil-square"></i></a>
+                                <a th:href="@{/usuario/EliminarUsuario/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger btn-util delete-user"><i class="bi bi-trash3-fill"></i></a>
                             </td>
                             
                             <!-- Baja logica -->
                             <td>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" >
+                                    <input class="form-check-input" type="checkbox" id="switch-bajalogica" role="switch" th:attr="data-id=${usuario.IdUsuario}" onchange="bajaLogica(this)" th:checked="${usuario.Status}">
                                     
                                 </div>
                             </td>
@@ -423,19 +440,27 @@
         
         <!-- Funcion Ajax para baja logica -->
         <script>
-            function cambiarEstado(idUsuario, estado) {
-                fetch("/usuario/cambiarEstado?id=" + idUsuario + "&activo=" + estado, {
-                    method: "POST"
-                })
-                .then(response => response.text())
-                .then(data = {
-                    console.log("Respuesta: ", data);
-                })
-                .catch(error("Error: ", error));
+            function bajaLogica(element) {
+                let idUsuario = $(element).data("id");
+                console.log(idUsuario);
+                element.disabled = true; //Desabilita el boton mientras la peticion se procesa
+                $.ajax({
+                    url: "/usuario/cambiarEstado/" + idUsuario,
+                    type: "GET",
+                    success: function() {
+                        //alert("dato mandado");
+                        element.disabled = false; //Habilita el boton, una vez procesada la peticion
+                    } 
+                });
             }
         </script>
 
-
+        <script>
+            document.getElementById("switch-bajalogica").addEventListener("click",
+                debounce(function() {
+                    console.log("no tan rapido");
+                }, 3000));
+        </script>
 
     </body>
 </html>

@@ -23,6 +23,7 @@ public class EstadoJPADAOImplementation implements IEstadoJPADAO {
 
         try {
             TypedQuery<Estado> queryEstados = entityManager.createQuery("FROM Estado where Pais.IdPais = :IdPais ", Estado.class);
+            queryEstados.setParameter("IdPais", IdPais);
             List<Estado> estados = queryEstados.getResultList();
 
             result.objects = new ArrayList<>();

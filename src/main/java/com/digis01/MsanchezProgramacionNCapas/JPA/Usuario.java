@@ -69,8 +69,8 @@ public class Usuario {
     @Column(name = "curp")
     private String Curp;
     
-    /*@Column(name = "status")
-    private int Status;*/
+    @Column(name = "status")
+    private int Status;
 
     /*@Column(name = "idrol")
     public int IdRol;*/
@@ -93,6 +93,7 @@ public class Usuario {
     }
 
     public Usuario(com.digis01.MsanchezProgramacionNCapas.ML.Usuario usuarioML) {
+        this.IdUsuario = usuarioML.getIdUsuario();
         this.UserName = usuarioML.getUserName();
         this.Nombre = usuarioML.getNombre();
         this.ApellidoPaterno = usuarioML.getApellidoPaterno();
@@ -106,7 +107,7 @@ public class Usuario {
         this.Celular = usuarioML.getCelular();
         this.Curp = usuarioML.getCurp();
         this.Imagen = usuarioML.getImagen();
-        //this.Status = usuarioML.getStatus();
+        this.Status = usuarioML.getStatus();
 
         this.Rol = new Rol();
         this.Rol.setIdRol(usuarioML.Rol.getIdRol());
@@ -306,13 +307,13 @@ public class Usuario {
     }
     
     //Getter y setter de status
-    /*public int getStatus() {
+    public int getStatus() {
         return Status;
     }
 
     public void setStatus(int Status) {
         this.Status = Status;
-    }*/
+    }
     
 
 }
